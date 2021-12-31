@@ -2,23 +2,40 @@ package bgu.spl.net.srv;
 
 import java.util.LinkedList;
 
-public class Client {
+public class User {
     private boolean loggedIn = false;
-    private LinkedList<Client> following;
-    private LinkedList<Client> followers;
+    private String username;
+    private String password;
+    private String birthday;
+    private LinkedList<User> following;
+    private LinkedList<User> followers;
     private LinkedList<String> posts;
     private LinkedList<String> privateMessages;
     private LinkedList<String> incomingPosts;
 
     //private ConnectionHandler<String> connectionHandler;
 
-    public Client(ConnectionHandler<String> connectionHandler){
-        //this.connectionHandler = connectionHandler;
+    public User(String username, String password, String birthday){
+        this.username = username;
+        this.password = password;
+        this.birthday = birthday;
         following = new LinkedList<>();
         followers = new LinkedList<>();
         posts = new LinkedList<>();
         privateMessages = new LinkedList<>();
         incomingPosts = new LinkedList<>();
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getBirthday() {
+        return birthday;
     }
 
     public boolean isLoggedIn() {
@@ -29,11 +46,11 @@ public class Client {
         this.loggedIn = loggedIn;
     }
 
-    public void addFollow(Client client){
+    public void addFollow(User client){
         following.add(client);
     }
 
-    public void addFollower(Client client){
+    public void addFollower(User client){
         followers.add(client);
     }
 
