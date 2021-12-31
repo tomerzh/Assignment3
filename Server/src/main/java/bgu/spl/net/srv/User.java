@@ -13,8 +13,6 @@ public class User {
     private LinkedList<String> privateMessages;
     private LinkedList<String> incomingPosts;
 
-    //private ConnectionHandler<String> connectionHandler;
-
     public User(String username, String password, String birthday){
         this.username = username;
         this.password = password;

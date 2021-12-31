@@ -2,11 +2,15 @@ package bgu.spl.net.srv.bidi;
 
 import bgu.spl.net.api.bidi.Connections;
 
-public class ConnectionsImpl<T> implements Connections<T> {
+import java.util.concurrent.ConcurrentHashMap;
 
+public class ConnectionsImpl<T> implements Connections<T> {
+    private ConcurrentHashMap<Integer, ConnectionHandler<T>> connIdToHandler;
+    private ConcurrentHashMap<String, Integer> usernameToId;
 
     public ConnectionsImpl() {
-
+        connIdToHandler = new ConcurrentHashMap<>();
+        usernameToId = new ConcurrentHashMap<>();
     }
 
     @Override
