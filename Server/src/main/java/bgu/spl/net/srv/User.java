@@ -1,5 +1,7 @@
 package bgu.spl.net.srv;
 
+import sun.misc.Queue;
+
 import java.util.LinkedList;
 
 public class User {
@@ -11,7 +13,7 @@ public class User {
     private LinkedList<User> followers;
     private LinkedList<String> posts;
     private LinkedList<String> privateMessages;
-    private LinkedList<String> incomingPosts;
+    private Queue<String> incomingPosts;
 
     public User(String username, String password, String birthday){
         this.username = username;
@@ -21,7 +23,7 @@ public class User {
         followers = new LinkedList<>();
         posts = new LinkedList<>();
         privateMessages = new LinkedList<>();
-        incomingPosts = new LinkedList<>();
+        incomingPosts = new Queue<>();
     }
 
     public String getUsername() {
@@ -38,6 +40,10 @@ public class User {
 
     public boolean isLoggedIn() {
         return loggedIn;
+    }
+
+    public void setLogging(boolean bool){
+        loggedIn = bool;
     }
 
     public void setLoggedIn(boolean loggedIn) {
@@ -57,7 +63,7 @@ public class User {
     }
 
     public void incomingPost(String s){
-        incomingPosts.add(s);
+        incomingPosts.enqueue(s);
     }
 
     public void addPM(String s){
