@@ -7,4 +7,9 @@ public class AckMessage implements Message {
     public void init() {
 
     }
+
+    @Override
+    public short getOpCode() {
+        return 0;
+    }
 }

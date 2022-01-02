@@ -1,4 +1,15 @@
 package bgu.spl.net.api.bidi.messages;
 
-public class LogoutMessage {
+import bgu.spl.net.api.bidi.Message;
+
+public class LogoutMessage implements Message {
+    @Override
+    public void init() {
+
+    }
+
+    @Override
+    public short getOpCode() {
+        return 0;
+    }
 }

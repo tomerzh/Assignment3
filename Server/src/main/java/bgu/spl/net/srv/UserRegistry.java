@@ -21,5 +21,4 @@ public class UserRegistry {
     public void removeRegistry(String username){
         usernameToUser.remove(username);
     }
-
 }

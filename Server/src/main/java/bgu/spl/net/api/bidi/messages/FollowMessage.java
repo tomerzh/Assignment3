@@ -1,4 +1,15 @@
 package bgu.spl.net.api.bidi.messages;
 
-public class FollowMessage {
+import bgu.spl.net.api.bidi.Message;
+
+public class FollowMessage implements Message {
+    @Override
+    public void init() {
+
+    }
+
+    @Override
+    public short getOpCode() {
+        return 0;
+    }
 }

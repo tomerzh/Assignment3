@@ -1,6 +1,6 @@
 package bgu.spl.net.api.bidi;
 
-public interface Command<T> {
+public interface Command {
 
-    T process();
+    void process(Message message);
 }

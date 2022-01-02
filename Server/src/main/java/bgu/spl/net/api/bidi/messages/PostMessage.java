@@ -1,4 +1,15 @@
 package bgu.spl.net.api.bidi.messages;
 
-public class PostMessage {
+import bgu.spl.net.api.bidi.Message;
+
+public class PostMessage implements Message {
+    @Override
+    public void init() {
+
+    }
+
+    @Override
+    public short getOpCode() {
+        return 0;
+    }
 }
