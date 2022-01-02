@@ -2,15 +2,15 @@ package bgu.spl.net.api.bidi;
 
 import bgu.spl.net.api.MessageEncoderDecoder;
 
-public class BGSMessageEncoderDecoder<T> implements MessageEncoderDecoder {
+public class BGSMessageEncoderDecoder<Message> implements MessageEncoderDecoder<Message> {
 
     @Override
-    public Object decodeNextByte(byte nextByte) {
+    public Message decodeNextByte(byte nextByte) {
         return null;
     }
 
     @Override
-    public byte[] encode(Object message) {
+    public byte[] encode(Message message) {
         return new byte[0];
     }
 }
