@@ -6,17 +6,29 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 
 public class PostMessage implements Message {
-    private short opCode = 5;
-    private LinkedList<Object> arguments;
+    private short opCode;
+    private String content;
 
-    public PostMessage(byte[][] bytes) {
-        arguments = new LinkedList<>();
-        String str = popString(bytes[0]);
-        arguments.add(str);
+    private int endByte;
+
+    public PostMessage() {
+
     }
 
     @Override
     public boolean decode(byte[] bytesArr) {
+        byte[] codeInBytes = {bytesArr[0], bytesArr[1]};
+        opCode = bytesToShort(codeInBytes);
+
+        endByte = 2;
+        while (bytesArr[endByte] != ';') {
+            if (bytesArr[endByte] == '\0') {
+                content = popString(bytesArr);
+            }
+            else {
+                endByte++;
+            }
+        }
         return false;
     }
 
@@ -25,13 +37,19 @@ public class PostMessage implements Message {
         return false;
     }
 
-    private String popString(byte[] bytes) {
-        String result = new String(bytes, StandardCharsets.UTF_8);
-        return result;
-    }
-
     @Override
     public short getOpCode() {
         return opCode;
+    }
+
+    private String popString(byte[] bytes) {
+        String result = new String(bytes, 2, endByte, StandardCharsets.UTF_8);
+        return result;
+    }
+
+    public short bytesToShort(byte[] byteArr) {
+        short result = (short)((byteArr[0] & 0xff) << 8);
+        result += (short)(byteArr[1] & 0xff);
+        return result;
     }
 }

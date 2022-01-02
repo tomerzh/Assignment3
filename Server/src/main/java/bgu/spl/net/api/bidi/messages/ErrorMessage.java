@@ -3,9 +3,10 @@ package bgu.spl.net.api.bidi.messages;
 import bgu.spl.net.api.bidi.Message;
 
 public class ErrorMessage implements Message {
-    private short opCode = 11;
+    private short opCode;
 
-    public ErrorMessage(byte[][] bytes) {
+    public ErrorMessage() {
+
     }
 
     @Override

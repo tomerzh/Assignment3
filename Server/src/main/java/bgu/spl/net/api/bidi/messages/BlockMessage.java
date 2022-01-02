@@ -6,20 +6,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 
 public class BlockMessage implements Message {
-    private short opCode = 12;
-    private LinkedList<Object> arguments;
+    private short opCode;
 
-    public BlockMessage(byte[][] bytes) {
-        arguments = new LinkedList<>();
-        for (byte[] nextByte: bytes) {
-            String str = popString(nextByte);
-            arguments.add(str);
-        }
-    }
+    public BlockMessage() {
 
-    private String popString(byte[] bytes) {
-        String result = new String(bytes, StandardCharsets.UTF_8);
-        return result;
     }
 
     @Override
@@ -35,5 +25,10 @@ public class BlockMessage implements Message {
     @Override
     public short getOpCode() {
         return opCode;
+    }
+
+    private String popString(byte[] bytes) {
+        String result = new String(bytes, StandardCharsets.UTF_8);
+        return result;
     }
 }

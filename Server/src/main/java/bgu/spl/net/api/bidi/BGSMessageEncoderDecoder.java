@@ -1,7 +1,6 @@
 package bgu.spl.net.api.bidi;
 
 import bgu.spl.net.api.MessageEncoderDecoder;
-import bgu.spl.net.api.bidi.commands.*;
 import bgu.spl.net.api.bidi.messages.RegisterMessage;
 
 import java.util.HashMap;
@@ -13,7 +12,7 @@ public class BGSMessageEncoderDecoder<T extends Message> implements MessageEncod
 //        Message message = null;
 //        if(messageClass != null){
 //            message = (Message) messageClass.newInstance();
-//            //message.decode - boolean
+//            message.decode(byteArr);
 //        }
 //        else {
 //            //message error

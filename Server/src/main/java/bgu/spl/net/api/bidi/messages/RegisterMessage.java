@@ -23,12 +23,12 @@ public class RegisterMessage implements Message {
         opCode = bytesToShort(codeInBytes);
         startByte = 2;
         endByte = 2;
-        int numOfString = 1;
+        int numOfArgument = 1;
 
         while (bytesArr[endByte] != ';') {
             if(bytesArr[endByte] == '\0') {
                 String str = popString(bytesArr);
-                switch (numOfString){
+                switch (numOfArgument){
                     case 1:
                         username = str;
                         break;
@@ -41,7 +41,7 @@ public class RegisterMessage implements Message {
                 }
                 endByte = endByte + 1;
                 startByte = endByte;
-                numOfString++;
+                numOfArgument++;
             }
             else {
                 endByte++;

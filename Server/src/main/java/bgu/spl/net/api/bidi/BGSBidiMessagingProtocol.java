@@ -14,6 +14,9 @@ public class BGSBidiMessagingProtocol<T extends Message> implements BidiMessagin
     private Message currMessage;
     private Command currCommand;
 
+    private short ackOpcode = 10;
+    private short errorOpcode = 11;
+
     public BGSBidiMessagingProtocol(){
         opcodeToCommand = new HashMap<>();
     }
@@ -31,10 +34,19 @@ public class BGSBidiMessagingProtocol<T extends Message> implements BidiMessagin
             currMessage = message;
             currCommand = opcodeToCommand.get(currMessage.getOpCode());
             if(currCommand != null){
-                currCommand.process(currMessage);
+                boolean processCompleted = currCommand.process(currMessage);
+                if(!processCompleted){ //error occurred
+                    currCommand = opcodeToCommand.get(errorOpcode);
+                    currCommand.process(currMessage);
+                }
+                else { //ack
+                    currCommand = opcodeToCommand.get(ackOpcode);
+                    currCommand.process(currMessage);
+                }
             }
             else {
-                //error command
+                currCommand = opcodeToCommand.get(errorOpcode);
+                currCommand.process(currMessage);
             }
         }
     }

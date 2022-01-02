@@ -3,9 +3,9 @@ package bgu.spl.net.api.bidi.messages;
 import bgu.spl.net.api.bidi.Message;
 
 public class AckMessage implements Message {
-    private short opCode = 10;
+    private short opCode;
 
-    public AckMessage(byte[][] bytes) {
+    public AckMessage() {
 
     }
 

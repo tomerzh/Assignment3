@@ -3,15 +3,17 @@ package bgu.spl.net.api.bidi.messages;
 import bgu.spl.net.api.bidi.Message;
 
 public class LogoutMessage implements Message {
-    private short opCode = 3;
+    private short opCode;
 
-    public LogoutMessage(byte[][] bytes) {
+    public LogoutMessage() {
 
     }
 
     @Override
     public boolean decode(byte[] bytesArr) {
-        return false;
+        byte[] codeInBytes = {bytesArr[0], bytesArr[1]};
+        opCode = bytesToShort(codeInBytes);
+        return true;
     }
 
     @Override
@@ -22,5 +24,11 @@ public class LogoutMessage implements Message {
     @Override
     public short getOpCode() {
         return opCode;
+    }
+
+    public short bytesToShort(byte[] byteArr) {
+        short result = (short)((byteArr[0] & 0xff) << 8);
+        result += (short)(byteArr[1] & 0xff);
+        return result;
     }
 }

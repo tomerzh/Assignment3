@@ -3,33 +3,51 @@ package bgu.spl.net.api.bidi.messages;
 import bgu.spl.net.api.bidi.Message;
 
 import java.nio.charset.StandardCharsets;
-import java.util.LinkedList;
 
 public class LoginMessage implements Message {
-    private short opCode = 2;
-    private LinkedList<Object> arguments;
+    private short opCode;
+    private String username;
+    private String password;
+    private byte captcha;
 
-    public LoginMessage(byte[][] bytes) {
-        arguments = new LinkedList<>();
-        for(int i = 0; i < bytes.length; i++){
-            if(i == bytes.length - 1){
-                arguments.add(bytes[i]);
-            }
-            else {
-                String str = popString(bytes[i]);
-                arguments.add(str);
-            }
-        }
-    }
+    private int startByte;
+    private int endByte;
 
-    private String popString(byte[] bytes) {
-        String result = new String(bytes, StandardCharsets.UTF_8);
-        return result;
+    public LoginMessage() {
+
     }
 
     @Override
     public boolean decode(byte[] bytesArr) {
-        return false;
+        byte[] codeInBytes = {bytesArr[0], bytesArr[1]};
+        opCode = bytesToShort(codeInBytes);
+
+        startByte = 2;
+        endByte = 2;
+        int numOfArgument = 1;
+
+        while (bytesArr[endByte] != ';') {
+            if(bytesArr[endByte] == '\0') {
+                String str = popString(bytesArr);
+                switch (numOfArgument){
+                    case 1:
+                        username = str;
+                        break;
+                    case 2:
+                        password = str;
+                        break;
+                }
+                endByte = endByte + 1;
+                startByte = endByte;
+                numOfArgument++;
+            }
+            else {
+                endByte++;
+            }
+        }
+        captcha = bytesArr[startByte]; //the last byte before the ';' char
+
+        return username != null && password != null;
     }
 
     @Override
@@ -40,5 +58,17 @@ public class LoginMessage implements Message {
     @Override
     public short getOpCode() {
         return opCode;
+    }
+
+
+    private String popString(byte[] bytes) {
+        String result = new String(bytes, startByte, endByte, StandardCharsets.UTF_8);
+        return result;
+    }
+
+    public short bytesToShort(byte[] byteArr) {
+        short result = (short)((byteArr[0] & 0xff) << 8);
+        result += (short)(byteArr[1] & 0xff);
+        return result;
     }
 }
