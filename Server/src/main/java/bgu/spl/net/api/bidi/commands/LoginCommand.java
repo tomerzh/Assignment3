@@ -5,7 +5,7 @@ import bgu.spl.net.api.bidi.Message;
 
 public class LoginCommand implements Command {
     @Override
-    public void process(Message message) {
+    public boolean process(Message message) {
 
     }
 }

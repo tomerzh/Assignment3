@@ -23,8 +23,13 @@ public class BlockMessage implements Message {
     }
 
     @Override
-    public LinkedList<Object> init() {
-        return arguments;
+    public boolean decode(byte[] bytesArr) {
+        return false;
+    }
+
+    @Override
+    public boolean encode() {
+        return false;
     }
 
     @Override

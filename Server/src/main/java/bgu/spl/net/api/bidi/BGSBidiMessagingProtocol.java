@@ -4,7 +4,7 @@ import bgu.spl.net.api.bidi.commands.*;
 
 import java.util.HashMap;
 
-public class BGSBidiMessagingProtocol<T> implements BidiMessagingProtocol<T> {
+public class BGSBidiMessagingProtocol<T extends Message> implements BidiMessagingProtocol<T> {
 
     private boolean shouldTerminate = false;
     private int connectionId;
@@ -28,9 +28,14 @@ public class BGSBidiMessagingProtocol<T> implements BidiMessagingProtocol<T> {
     @Override
     public void process(T message) {
         if(message != null){
-            currMessage = (Message) message;
+            currMessage = message;
             currCommand = opcodeToCommand.get(currMessage.getOpCode());
-            currCommand.process(currMessage);
+            if(currCommand != null){
+                currCommand.process(currMessage);
+            }
+            else {
+                //error command
+            }
         }
     }
 

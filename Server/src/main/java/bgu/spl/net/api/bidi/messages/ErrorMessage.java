@@ -2,8 +2,6 @@ package bgu.spl.net.api.bidi.messages;
 
 import bgu.spl.net.api.bidi.Message;
 
-import java.util.LinkedList;
-
 public class ErrorMessage implements Message {
     private short opCode = 11;
 
@@ -11,8 +9,13 @@ public class ErrorMessage implements Message {
     }
 
     @Override
-    public LinkedList<Object> init() {
-        return null;
+    public boolean decode(byte[] bytesArr) {
+        return false;
+    }
+
+    @Override
+    public boolean encode() {
+        return false;
     }
 
     @Override
