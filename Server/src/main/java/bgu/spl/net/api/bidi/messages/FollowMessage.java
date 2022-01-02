@@ -3,6 +3,8 @@ package bgu.spl.net.api.bidi.messages;
 import bgu.spl.net.api.bidi.Message;
 
 public class FollowMessage implements Message {
+    private short opCode = 4;
+
     @Override
     public void init() {
 
@@ -10,6 +12,6 @@ public class FollowMessage implements Message {
 
     @Override
     public short getOpCode() {
-        return 0;
+        return opCode;
     }
 }

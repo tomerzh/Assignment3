@@ -3,6 +3,7 @@ package bgu.spl.net.api.bidi.messages;
 import bgu.spl.net.api.bidi.Message;
 
 public class AckMessage implements Message {
+    private short opCode = 10;
     @Override
     public void init() {
 
@@ -10,6 +11,6 @@ public class AckMessage implements Message {
 
     @Override
     public short getOpCode() {
-        return 0;
+        return opCode;
     }
 }
