@@ -3,12 +3,11 @@ package bgu.spl.net.api.bidi.messages;
 import bgu.spl.net.api.bidi.Message;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.LinkedList;
 
 public class RegisterMessage implements Message {
     private short opCode = 1;
-    private LinkedList<String> arguments;
+    private LinkedList<Object> arguments;
 
     public RegisterMessage(byte[][] bytes) {
         arguments = new LinkedList<>();
@@ -24,8 +23,8 @@ public class RegisterMessage implements Message {
     }
 
     @Override
-    public void init() {
-
+    public LinkedList<Object> init() {
+        return arguments;
     }
 
     @Override
