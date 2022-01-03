@@ -14,11 +14,15 @@ public class UserRegistry {
         return instance;
     }
 
-    public void addRegistry(User user){
-        usernameToUser.put(user.getUsername(), user);
+    public void addRegistry(String username, User user){
+        usernameToUser.put(username, user);
     }
 
     public void removeRegistry(String username){
         usernameToUser.remove(username);
+    }
+
+    public boolean isUserRegistered(String username) {
+        return usernameToUser.containsKey(username);
     }
 }

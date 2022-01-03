@@ -60,6 +60,18 @@ public class RegisterMessage implements Message {
         return opCode;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
     private String popString(byte[] bytes) {
         String result = new String(bytes, startByte, endByte, StandardCharsets.UTF_8);
         return result;
