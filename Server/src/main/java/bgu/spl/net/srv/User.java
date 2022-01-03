@@ -1,5 +1,6 @@
 package bgu.spl.net.srv;
 
+import bgu.spl.net.api.bidi.messages.PmMessage;
 import sun.misc.Queue;
 
 import java.util.LinkedList;
@@ -14,8 +15,9 @@ public class User {
     private LinkedBlockingQueue<User> following;
     private LinkedBlockingQueue<User> followers;
     private LinkedBlockingQueue<String> posts;
-    private LinkedBlockingQueue<String> privateMessages;
+    private LinkedBlockingQueue<PmMessage> privateMessages;
     private LinkedBlockingQueue<String> incomingPosts;
+    private LinkedBlockingQueue<PmMessage> incomingPMs;
 
     public User(String username, String password, String birthday){
         this.username = username;
@@ -26,6 +28,7 @@ public class User {
         posts = new LinkedBlockingQueue<>();
         privateMessages = new LinkedBlockingQueue<>();
         incomingPosts = new LinkedBlockingQueue<>();
+        incomingPMs = new LinkedBlockingQueue<>();
     }
 
     public String getUsername() {
@@ -52,12 +55,16 @@ public class User {
         return posts;
     }
 
-    public LinkedBlockingQueue<String> getPrivateMessages() {
+    public LinkedBlockingQueue<PmMessage> getPrivateMessages() {
         return privateMessages;
     }
 
     public LinkedBlockingQueue<String> getIncomingPosts() {
         return incomingPosts;
+    }
+
+    public LinkedBlockingQueue<PmMessage> getIncomingPMs() {
+        return incomingPMs;
     }
 
     public boolean isLoggedIn() {
@@ -92,7 +99,11 @@ public class User {
         incomingPosts.add(s);
     }
 
-    public void addPM(String s){
-        privateMessages.add(s);
+    public void addPM(PmMessage pmMessage){
+        privateMessages.add(pmMessage);
+    }
+
+    public void addIncomingPM(PmMessage pmMessage){
+        incomingPMs.add(pmMessage);
     }
 }
