@@ -7,11 +7,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ConnectionsImpl<T> implements Connections<T> {
     private ConcurrentHashMap<Integer, ConnectionHandler<T>> connIdToHandler;
     private ConcurrentHashMap<String, Integer> usernameToId;
+    private ConcurrentHashMap<Integer, String> idToUsername;
     private Integer nextAvailableId;
 
     public ConnectionsImpl() {
         connIdToHandler = new ConcurrentHashMap<>();
         usernameToId = new ConcurrentHashMap<>();
+        idToUsername = new ConcurrentHashMap<>();
         nextAvailableId = 0;
     }
 
@@ -28,10 +30,20 @@ public class ConnectionsImpl<T> implements Connections<T> {
 
     public void addNewUser(String username, int connId){
         usernameToId.put(username, connId);
+        idToUsername.put(connId, username);
     }
 
     public void removeUser(String username){
+        int id = usernameToId.get(username);
         usernameToId.remove(username);
+        idToUsername.remove(id);
+    }
+
+    public String getUsername(int id) {
+        if (!idToUsername.containsKey(id)) {
+            return null;
+        }
+        return idToUsername.get(id);
     }
 
     @Override
