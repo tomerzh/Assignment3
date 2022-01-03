@@ -8,7 +8,7 @@ import java.util.LinkedList;
 public class StatMessage implements Message {
     private short opCode;
 
-    public StatMessage(byte[][] bytes) {
+    public StatMessage() {
 
     }
 
