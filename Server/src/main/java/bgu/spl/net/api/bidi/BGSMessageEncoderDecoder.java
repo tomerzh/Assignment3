@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class BGSMessageEncoderDecoder<T extends Message> implements MessageEncoderDecoder<T> {
     @Override
-    public T decodeNextByte(byte nextByte) throws InstantiationException, IllegalAccessException {
+    public T decodeNextByte(byte nextByte) {
 //        Class messageClass = opCodeToMessage.get(i);
 //        Message message = null;
 //        if(messageClass != null){
