@@ -25,4 +25,8 @@ public class UserRegistry {
     public boolean isUserRegistered(String username) {
         return usernameToUser.containsKey(username);
     }
+
+    public User getUser(String userName){
+        return usernameToUser.get(userName);
+    }
 }

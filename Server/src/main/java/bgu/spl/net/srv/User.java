@@ -42,10 +42,6 @@ public class User {
         return loggedIn;
     }
 
-    public void setLogging(boolean bool){
-        loggedIn = bool;
-    }
-
     public void setLoggedIn(boolean loggedIn) {
         this.loggedIn = loggedIn;
     }
