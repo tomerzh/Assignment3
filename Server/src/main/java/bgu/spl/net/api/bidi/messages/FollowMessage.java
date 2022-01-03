@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 
 public class FollowMessage implements Message {
     private short opCode;
-    private byte followOrUnfollow;
+    private boolean followOrUnfollow = false;
     private String username;
 
     public FollowMessage() {
@@ -18,7 +18,9 @@ public class FollowMessage implements Message {
     public boolean decode(byte[] bytesArr) {
         byte[] codeInBytes = {bytesArr[0], bytesArr[1]};
         opCode = bytesToShort(codeInBytes);
-        followOrUnfollow = bytesArr[2];
+        if(bytesArr[2] == 0){
+            followOrUnfollow = true;
+        }
         username = popString(bytesArr);
         return true;
     }
@@ -31,6 +33,14 @@ public class FollowMessage implements Message {
     @Override
     public short getOpCode() {
         return opCode;
+    }
+
+    public boolean isFollowOrUnfollow() {
+        return followOrUnfollow;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     private String popString(byte[] bytes) {

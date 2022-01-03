@@ -26,12 +26,10 @@ public class RegisterCommand implements Command {
         if (userRegistry.isUserRegistered(username)) {
             return false; //error, user already registered
         }
-        else {
-            password = registerMessage.getPassword();
-            birthday = registerMessage.getBirthday();
-            User user = new User(username, password, birthday);
-            userRegistry.addRegistry(username, user);
-            return true;
-        }
+        password = registerMessage.getPassword();
+        birthday = registerMessage.getBirthday();
+        User user = new User(username, password, birthday);
+        userRegistry.addRegistry(username, user);
+        return true;
     }
 }
