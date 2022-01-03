@@ -5,7 +5,7 @@ import bgu.spl.net.api.bidi.Message;
 public class LogstatMessage implements Message {
     private short opCode;
 
-    public LogstatMessage(byte[][] bytes) {
+    public LogstatMessage() {
 
     }
 
