@@ -71,4 +71,16 @@ public class LoginMessage implements Message {
         result += (short)(byteArr[1] & 0xff);
         return result;
     }
+
+    public String getUsername(){
+        return username;
+    }
+
+    public String getPassword(){
+        return password;
+    }
+
+    public Byte getCaptcha(){
+        return captcha;
+    }
 }
