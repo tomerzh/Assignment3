@@ -34,19 +34,19 @@ public class BGSBidiMessagingProtocol<T extends Message> implements BidiMessagin
             currMessage = message;
             currCommand = opcodeToCommand.get(currMessage.getOpCode());
             if(currCommand != null){
-                boolean processCompleted = currCommand.process(currMessage);
+                boolean processCompleted = currCommand.process(currMessage, connectionId, connections);
                 if(!processCompleted){ //error occurred
                     currCommand = opcodeToCommand.get(errorOpcode);
-                    currCommand.process(currMessage);
+                    currCommand.process(currMessage, connectionId, connections);
                 }
                 else { //ack
                     currCommand = opcodeToCommand.get(ackOpcode);
-                    currCommand.process(currMessage);
+                    currCommand.process(currMessage, connectionId, connections);
                 }
             }
             else {
                 currCommand = opcodeToCommand.get(errorOpcode);
-                currCommand.process(currMessage);
+                currCommand.process(currMessage, connectionId, connections);
             }
         }
     }
