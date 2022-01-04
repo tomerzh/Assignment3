@@ -19,6 +19,7 @@ public class User {
     private LinkedBlockingQueue<PmMessage> privateMessages;
     private LinkedBlockingQueue<NotificationMessage> incomingPosts;
     private LinkedBlockingQueue<NotificationMessage> incomingPMs;
+    private LinkedBlockingQueue<User> blocked;
 
     public User(String username, String password, String birthday){
         this.username = username;
@@ -30,6 +31,7 @@ public class User {
         privateMessages = new LinkedBlockingQueue<>();
         incomingPosts = new LinkedBlockingQueue<>();
         incomingPMs = new LinkedBlockingQueue<>();
+        blocked = new LinkedBlockingQueue<>();
     }
 
     public String getUsername() {
@@ -106,5 +108,13 @@ public class User {
 
     public void addIncomingPM(NotificationMessage pmMessage){
         incomingPMs.add(pmMessage);
+    }
+
+    public void addBlock(User user){
+        blocked.add(user);
+    }
+
+    public LinkedBlockingQueue<User> getBlockingList(){
+        return blocked;
     }
 }

@@ -33,12 +33,11 @@ public class LogoutCommand implements Command {
         //check if connected, if true, logout user
         if(this.connections.getUsername(connId)!=null){
             currUser.setLoggedIn(false);
-            //should be close after sending ack? to do!
-            ((ConnectionsImpl<?>) connections).removeUser(userName);
-            ((ConnectionsImpl<?>) connections).removeClient(connId);
+            this.connections.removeUser(userName);
+            this.connections.removeClient(connId);
+            protocol.terminate();
             AckMessage ack = new AckMessage(currMessage.getOpCode());
             connections.send(connId, ack);
-            protocol.terminate();
         }
         else{
             ErrorMessage error = new ErrorMessage(currMessage.getOpCode());
