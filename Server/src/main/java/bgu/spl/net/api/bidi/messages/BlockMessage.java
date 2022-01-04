@@ -7,6 +7,8 @@ import java.util.LinkedList;
 
 public class BlockMessage implements Message {
     private short opCode;
+    private String username;
+    private int endByte;
 
     public BlockMessage() {
 
@@ -14,7 +16,17 @@ public class BlockMessage implements Message {
 
     @Override
     public boolean decode(byte[] bytesArr) {
-        return false;
+        byte[] codeInBytes = {bytesArr[0], bytesArr[1]};
+        opCode = bytesToShort(codeInBytes);
+
+        endByte = 2;
+        while (bytesArr[endByte] != ';') {
+            if (bytesArr[endByte] == '\0') {
+                username = popString(bytesArr);
+            }
+            endByte++;
+        }
+        return true;
     }
 
     @Override
@@ -27,8 +39,18 @@ public class BlockMessage implements Message {
         return opCode;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
     private String popString(byte[] bytes) {
-        String result = new String(bytes, StandardCharsets.UTF_8);
+        String result = new String(bytes, 2, endByte, StandardCharsets.UTF_8);
+        return result;
+    }
+
+    public short bytesToShort(byte[] byteArr) {
+        short result = (short)((byteArr[0] & 0xff) << 8);
+        result += (short)(byteArr[1] & 0xff);
         return result;
     }
 }

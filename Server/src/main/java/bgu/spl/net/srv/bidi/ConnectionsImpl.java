@@ -60,7 +60,11 @@ public class ConnectionsImpl<T> implements Connections<T> {
 
     @Override
     public boolean send(int connectionId, T msg) {
-        return false;
+        if(!connIdToHandler.containsKey(connectionId)){
+            return false;
+        }
+        connIdToHandler.get(connectionId).send(msg);
+        return true;
     }
 
     @Override

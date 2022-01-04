@@ -26,11 +26,9 @@ public class PostMessage implements Message {
             if (bytesArr[endByte] == '\0') {
                 content = popString(bytesArr);
             }
-            else {
-                endByte++;
-            }
+            endByte++;
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -44,7 +42,7 @@ public class PostMessage implements Message {
     }
 
     private String popString(byte[] bytes) {
-        String result = new String(bytes, 2, endByte, StandardCharsets.UTF_8);
+        String result = new String(bytes, 2, (endByte-1), StandardCharsets.UTF_8);
         return result;
     }
 

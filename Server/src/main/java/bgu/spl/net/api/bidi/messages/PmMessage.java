@@ -74,7 +74,7 @@ public class PmMessage implements Message {
     }
 
     private String popString(byte[] bytes) {
-        String result = new String(bytes, startByte, endByte, StandardCharsets.UTF_8);
+        String result = new String(bytes, startByte, (endByte-1), StandardCharsets.UTF_8);
         return result;
     }
 
