@@ -6,7 +6,7 @@ import bgu.spl.net.api.bidi.Message;
 
 public class BlockCommand implements Command {
     @Override
-    public boolean process(Message message, int connId, Connections connections) {
+    public void process(Message message, int connId, Connections connections) {
 
     }
 }

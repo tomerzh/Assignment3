@@ -4,11 +4,11 @@ import bgu.spl.net.api.bidi.BGSBidiMessagingProtocol;
 import bgu.spl.net.api.bidi.Command;
 import bgu.spl.net.api.bidi.Connections;
 import bgu.spl.net.api.bidi.Message;
-import bgu.spl.net.api.bidi.messages.LoginMessage;
+import bgu.spl.net.api.bidi.messages.AckMessage;
+import bgu.spl.net.api.bidi.messages.ErrorMessage;
 import bgu.spl.net.api.bidi.messages.LogoutMessage;
 import bgu.spl.net.srv.User;
 import bgu.spl.net.srv.UserRegistry;
-import bgu.spl.net.srv.bidi.ConnectionHandler;
 import bgu.spl.net.srv.bidi.ConnectionsImpl;
 
 public class LogoutCommand implements Command {
@@ -25,7 +25,7 @@ public class LogoutCommand implements Command {
     }
 
     @Override
-    public boolean process(Message message, int connId, Connections connections)  {
+    public void process(Message message, int connId, Connections connections)  {
         this.connections = (ConnectionsImpl) connections;
         this.currMessage = (LogoutMessage) message;
         String userName = this.connections.getUsername(connId);
@@ -36,14 +36,13 @@ public class LogoutCommand implements Command {
             //should be close after sending ack? to do!
             ((ConnectionsImpl<?>) connections).removeUser(userName);
             ((ConnectionsImpl<?>) connections).removeClient(connId);
-            //send ack
+            AckMessage ack = new AckMessage(currMessage.getOpCode());
+            connections.send(connId, ack);
             protocol.terminate();
         }
-
         else{
-            //return error
+            ErrorMessage error = new ErrorMessage(currMessage.getOpCode());
+            connections.send(connId, error);
         }
-
-        return processed;
     }
 }

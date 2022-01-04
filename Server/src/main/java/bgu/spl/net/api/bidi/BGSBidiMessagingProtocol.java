@@ -1,6 +1,7 @@
 package bgu.spl.net.api.bidi;
 
 import bgu.spl.net.api.bidi.commands.*;
+import bgu.spl.net.api.bidi.messages.ErrorMessage;
 
 import java.util.HashMap;
 
@@ -34,19 +35,11 @@ public class BGSBidiMessagingProtocol<T extends Message> implements BidiMessagin
             currMessage = message;
             currCommand = opcodeToCommand.get(currMessage.getOpCode());
             if(currCommand != null){
-                boolean processCompleted = currCommand.process(currMessage, connectionId, connections);
-                if(!processCompleted){ //error occurred
-                    currCommand = opcodeToCommand.get(errorOpcode);
-                    currCommand.process(currMessage, connectionId, connections);
-                }
-                else { //ack
-                    currCommand = opcodeToCommand.get(ackOpcode);
-                    currCommand.process(currMessage, connectionId, connections);
-                }
+                currCommand.process(currMessage, connectionId, connections);
             }
             else {
-                currCommand = opcodeToCommand.get(errorOpcode);
-                currCommand.process(currMessage, connectionId, connections);
+                ErrorMessage error = new ErrorMessage((short) -1);
+                connections.send(connectionId, (T) error);
             }
         }
     }
@@ -69,9 +62,6 @@ public class BGSBidiMessagingProtocol<T extends Message> implements BidiMessagin
         opcodeToCommand.put((short) 6, new PMCommand());
         opcodeToCommand.put((short) 7, new LogstatCommand());
         opcodeToCommand.put((short) 8, new StatCommand());
-        opcodeToCommand.put((short) 9, new NotificationCommand());
-        opcodeToCommand.put((short) 10, new AckCommand());
-        opcodeToCommand.put((short) 11, new ErrorCommand());
         opcodeToCommand.put((short) 12, new BlockCommand());
     }
 }

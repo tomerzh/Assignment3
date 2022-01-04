@@ -3,9 +3,7 @@ package bgu.spl.net.api.bidi.commands;
 import bgu.spl.net.api.bidi.Command;
 import bgu.spl.net.api.bidi.Connections;
 import bgu.spl.net.api.bidi.Message;
-import bgu.spl.net.api.bidi.messages.LoginMessage;
-import bgu.spl.net.api.bidi.messages.NotificationMessage;
-import bgu.spl.net.api.bidi.messages.PostMessage;
+import bgu.spl.net.api.bidi.messages.*;
 import bgu.spl.net.srv.User;
 import bgu.spl.net.srv.UserRegistry;
 import bgu.spl.net.srv.bidi.ConnectionsImpl;
@@ -15,7 +13,6 @@ import java.util.LinkedList;
 public class PostCommand implements Command {
 
     private PostMessage currMessage = null;
-    private boolean processed = false;
     private ConnectionsImpl connections = null;
     private LinkedList<String> usersToSend = null;
     private UserRegistry userRegistry;
@@ -25,7 +22,7 @@ public class PostCommand implements Command {
     }
 
     @Override
-    public boolean process(Message message, int connId, Connections connections) {
+    public void process(Message message, int connId, Connections connections) {
         this.currMessage = (PostMessage) message;
         this.connections = (ConnectionsImpl) connections;
         this.usersToSend = currMessage.getUsersToSend();
@@ -48,19 +45,22 @@ public class PostCommand implements Command {
                         currMessage.getContent());
                 sendNotification(notification, receiver);
             }
+
+            AckMessage ack = new AckMessage(currMessage.getOpCode());
+            connections.send(connId, ack);
         }
 
         //send error message
         else{
-
+            ErrorMessage error = new ErrorMessage(currMessage.getOpCode());
+            connections.send(connId, error);
         }
-        return processed;
     }
 
     private void sendNotification(NotificationMessage notification, User receiver){
         int receiverId = connections.getId(receiver.getUsername());
         if(receiverId != -1){ //user is logged in
-            this.connections.send(receiverId, notification);
+            connections.send(receiverId, notification);
         }
 
         else{ //user is logged out
