@@ -6,6 +6,7 @@ import bgu.spl.net.api.bidi.Message;
 import bgu.spl.net.api.bidi.messages.AckMessage;
 import bgu.spl.net.api.bidi.messages.ErrorMessage;
 import bgu.spl.net.api.bidi.messages.LoginMessage;
+import bgu.spl.net.api.bidi.messages.NotificationMessage;
 import bgu.spl.net.srv.User;
 import bgu.spl.net.srv.UserRegistry;
 import bgu.spl.net.srv.bidi.ConnectionsImpl;
@@ -37,15 +38,25 @@ public class LoginCommand implements Command {
             }
             //user can log in
             else{
-                ((ConnectionsImpl<?>) connections).addNewUser(userName, connId);
+                this.connections.addNewUser(userName, connId);
                 currUser.setLoggedIn(true);
                 AckMessage ack = new AckMessage(currMessage.getOpCode());
-                connections.send(connId, ack);
+                this.connections.send(connId, ack);
+
+                //send to user notifications for unseen posts
+                for(NotificationMessage notification : currUser.getIncomingPosts()){
+                    this.connections.send(connId, notification);
+                }
+
+                //send to user notifications for unseen pm
+                for(NotificationMessage notification : currUser.getIncomingPMs()){
+                    this.connections.send(connId, notification);
+                }
             }
         }
         else {
             ErrorMessage error = new ErrorMessage(currMessage.getOpCode());
-            connections.send(connId, error);
+            this.connections.send(connId, error);
         }
     }
 }

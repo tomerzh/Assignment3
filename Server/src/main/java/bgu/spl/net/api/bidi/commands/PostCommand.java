@@ -9,6 +9,7 @@ import bgu.spl.net.srv.UserRegistry;
 import bgu.spl.net.srv.bidi.ConnectionsImpl;
 
 import java.util.LinkedList;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class PostCommand implements Command {
 
@@ -29,25 +30,42 @@ public class PostCommand implements Command {
         String userName = this.connections.getUsername(connId);
         User currUser = userRegistry.getUser(userName);
 
-        //send notification post to all following users and @user
         if(currUser.isLoggedIn()){
-            //send to followers
-            for(User follower : currUser.getFollowers()){
-                //send notification
-                NotificationMessage notification = new NotificationMessage((byte) 1, userName,
-                                                                            currMessage.getContent());
-                sendNotification(notification, follower);
-            }
-            //send to @users
+            LinkedBlockingQueue<User> blocked = currUser.getBlockingList();
+            boolean err = false;
+            //checks if @user is blocked user or unregistered
             for(String name : usersToSend){
-                User receiver = userRegistry.getUser(name);
-                NotificationMessage notification = new NotificationMessage((byte) 1, userName,
-                        currMessage.getContent());
-                sendNotification(notification, receiver);
+                if(blocked.contains(userRegistry.getUser(name)) || !(userRegistry.isUserRegistered(name))){
+                    err = true;
+                }
             }
 
-            AckMessage ack = new AckMessage(currMessage.getOpCode());
-            connections.send(connId, ack);
+            if(!err){
+                //add to myPosts
+                currUser.newPost(currMessage.getContent());
+                //send to followers
+                for(User follower : currUser.getFollowers()){
+                    //send notification
+                    NotificationMessage notification = new NotificationMessage((byte) 1, userName,
+                            currMessage.getContent());
+                    sendNotification(notification, follower);
+                }
+                //send to @users
+                for(String name : usersToSend){
+                    User receiver = userRegistry.getUser(name);
+                    NotificationMessage notification = new NotificationMessage((byte) 1, userName,
+                            currMessage.getContent());
+                    sendNotification(notification, receiver);
+                }
+
+                AckMessage ack = new AckMessage(currMessage.getOpCode());
+                connections.send(connId, ack);
+            }
+
+            else{
+                ErrorMessage error = new ErrorMessage(currMessage.getOpCode());
+                connections.send(connId, error);
+            }
         }
 
         //send error message
