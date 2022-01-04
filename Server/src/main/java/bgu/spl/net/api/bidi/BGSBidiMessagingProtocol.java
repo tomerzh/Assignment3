@@ -53,7 +53,11 @@ public class BGSBidiMessagingProtocol<T extends Message> implements BidiMessagin
 
     @Override
     public boolean shouldTerminate() {
-        return false;
+        return shouldTerminate;
+    }
+
+    public void terminate(){
+        shouldTerminate = true;
     }
 
     private void initOpCodes(){
