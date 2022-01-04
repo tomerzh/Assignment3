@@ -11,7 +11,7 @@ public class RegisterMessage implements Message {
     private String birthday;
 
     private int startByte;
-    private int endByte;
+    private int len;
 
     public RegisterMessage() {
 
@@ -22,11 +22,11 @@ public class RegisterMessage implements Message {
         byte[] codeInBytes = {bytesArr[0], bytesArr[1]};
         opCode = bytesToShort(codeInBytes);
         startByte = 2;
-        endByte = 2;
+        len = 0;
         int numOfArgument = 1;
 
-        while (bytesArr[endByte] != ';') {
-            if(bytesArr[endByte] == '\0') {
+        while (bytesArr[startByte+len] != ';') {
+            if(bytesArr[startByte+len] == '\0') {
                 String str = popString(bytesArr);
                 switch (numOfArgument){
                     case 1:
@@ -39,12 +39,12 @@ public class RegisterMessage implements Message {
                         birthday = str;
                         break;
                 }
-                endByte = endByte + 1;
-                startByte = endByte;
+                len = len + 1;
+                startByte = len;
                 numOfArgument++;
             }
             else {
-                endByte++;
+                len++;
             }
         }
         return username != null && password != null && birthday != null;
@@ -73,7 +73,8 @@ public class RegisterMessage implements Message {
     }
 
     private String popString(byte[] bytes) {
-        String result = new String(bytes, startByte, endByte, StandardCharsets.UTF_8);
+        String result = new String(bytes, startByte, len, StandardCharsets.UTF_8);
+        len = 0;
         return result;
     }
 
