@@ -7,26 +7,14 @@ import java.util.LinkedList;
 
 public class NotificationMessage implements Message {
     private short opCode = 9;
-    private LinkedList<Object> arguments;
+    private byte notificationType;
+    private String postingUser;
+    private String Content;
 
-    public NotificationMessage(byte[][] bytes) {
-        arguments = new LinkedList<>();
-        byte nextByte = bytes[0][0];
-        arguments.add(nextByte);
-        String strWithByte = popStringWithByte(bytes[0]);
-        arguments.add(strWithByte);
-        String str = popString(bytes[1]);
-        arguments.add(str);
-    }
-
-    private String popString(byte[] bytes) {
-        String result = new String(bytes, StandardCharsets.UTF_8);
-        return result;
-    }
-
-    private String popStringWithByte(byte[] bytes) {
-        String result = new String(bytes, 1, bytes.length, StandardCharsets.UTF_8);
-        return result;
+    public NotificationMessage(byte notificationType, String postingUser, String content) {
+        this.notificationType = notificationType;
+        this.postingUser = postingUser;
+        this.Content = content;
     }
 
     @Override

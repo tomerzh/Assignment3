@@ -8,11 +8,12 @@ import java.util.LinkedList;
 public class PostMessage implements Message {
     private short opCode;
     private String content;
+    private LinkedList<String> usersToSend;
 
     private int endByte;
 
     public PostMessage() {
-
+        usersToSend = new LinkedList<String>();
     }
 
     @Override
@@ -51,5 +52,13 @@ public class PostMessage implements Message {
         short result = (short)((byteArr[0] & 0xff) << 8);
         result += (short)(byteArr[1] & 0xff);
         return result;
+    }
+
+    public LinkedList<String> getUsersToSend(){
+        return usersToSend;
+    }
+
+    public String getContent(){
+        return content;
     }
 }

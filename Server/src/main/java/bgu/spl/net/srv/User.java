@@ -1,5 +1,6 @@
 package bgu.spl.net.srv;
 
+import bgu.spl.net.api.bidi.messages.NotificationMessage;
 import bgu.spl.net.api.bidi.messages.PmMessage;
 import sun.misc.Queue;
 
@@ -16,8 +17,8 @@ public class User {
     private LinkedBlockingQueue<User> followers;
     private LinkedBlockingQueue<String> posts;
     private LinkedBlockingQueue<PmMessage> privateMessages;
-    private LinkedBlockingQueue<String> incomingPosts;
-    private LinkedBlockingQueue<PmMessage> incomingPMs;
+    private LinkedBlockingQueue<NotificationMessage> incomingPosts;
+    private LinkedBlockingQueue<NotificationMessage> incomingPMs;
 
     public User(String username, String password, String birthday){
         this.username = username;
@@ -59,11 +60,11 @@ public class User {
         return privateMessages;
     }
 
-    public LinkedBlockingQueue<String> getIncomingPosts() {
+    public LinkedBlockingQueue<NotificationMessage> getIncomingPosts() {
         return incomingPosts;
     }
 
-    public LinkedBlockingQueue<PmMessage> getIncomingPMs() {
+    public LinkedBlockingQueue<NotificationMessage> getIncomingPMs() {
         return incomingPMs;
     }
 
@@ -95,15 +96,15 @@ public class User {
         posts.add(s);
     }
 
-    public void incomingPost(String s){
-        incomingPosts.add(s);
+    public void addIncomingPost(NotificationMessage post){
+        incomingPosts.add(post);
     }
 
     public void addPM(PmMessage pmMessage){
         privateMessages.add(pmMessage);
     }
 
-    public void addIncomingPM(PmMessage pmMessage){
+    public void addIncomingPM(NotificationMessage pmMessage){
         incomingPMs.add(pmMessage);
     }
 }
