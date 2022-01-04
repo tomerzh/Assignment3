@@ -50,12 +50,12 @@ public class ConnectionsImpl<T> implements Connections<T> {
         return connIdToHandler.get(id);
     }
 
-    public boolean isConnected(int id){
-        return idToUsername.containsKey(id);
-    }
 
-    public boolean isConnected(String userName){
-        return usernameToId.containsKey(userName);
+    public int getId(String userName){
+        if(!usernameToId.containsKey(userName)){
+            return -1;
+        }
+        return usernameToId.get(userName);
     }
 
     @Override

@@ -11,7 +11,7 @@ import bgu.spl.net.srv.bidi.ConnectionsImpl;
 public class LoginCommand implements Command {
 
     private LoginMessage currMessage = null;
-    private boolean processed = false;
+    private boolean processed = false; //delete this field
     private UserRegistry userRegistry;
     private ConnectionsImpl connections = null;
 

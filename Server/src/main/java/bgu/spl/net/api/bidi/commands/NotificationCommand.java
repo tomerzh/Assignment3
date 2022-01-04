@@ -7,6 +7,6 @@ import bgu.spl.net.api.bidi.Message;
 public class NotificationCommand implements Command {
     @Override
     public boolean process(Message message, int connId, Connections connections) {
-
+        return false;
     }
 }

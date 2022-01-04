@@ -63,7 +63,7 @@ public class BGSBidiMessagingProtocol<T extends Message> implements BidiMessagin
     private void initOpCodes(){
         opcodeToCommand.put((short) 1, new RegisterCommand());
         opcodeToCommand.put((short) 2, new LoginCommand());
-        opcodeToCommand.put((short) 3, new LogoutCommand());
+        opcodeToCommand.put((short) 3, new LogoutCommand(this));
         opcodeToCommand.put((short) 4, new FollowCommand());
         opcodeToCommand.put((short) 5, new PostCommand());
         opcodeToCommand.put((short) 6, new PMCommand());
