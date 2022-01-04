@@ -1,5 +1,6 @@
 package bgu.spl.net.srv;
 
+import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class UserRegistry {
@@ -12,6 +13,10 @@ public class UserRegistry {
 
     public static UserRegistry getInstance() {
         return instance;
+    }
+
+    public LinkedList<User> getAllRegisteredUsers() {
+        return new LinkedList<>(usernameToUser.values());
     }
 
     public void addRegistry(String username, User user){
