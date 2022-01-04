@@ -46,6 +46,18 @@ public class ConnectionsImpl<T> implements Connections<T> {
         return idToUsername.get(id);
     }
 
+    public ConnectionHandler getConnectionHandler(int id){
+        return connIdToHandler.get(id);
+    }
+
+    public boolean isConnected(int id){
+        return idToUsername.containsKey(id);
+    }
+
+    public boolean isConnected(String userName){
+        return usernameToId.containsKey(userName);
+    }
+
     @Override
     public boolean send(int connectionId, T msg) {
         return false;
