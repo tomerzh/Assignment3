@@ -17,8 +17,8 @@ public class LogstatMessage implements Message {
     }
 
     @Override
-    public boolean encode() {
-        return false;
+    public byte[] encode() {
+        return null;
     }
 
     @Override

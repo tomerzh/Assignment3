@@ -3,7 +3,6 @@ package bgu.spl.net.api.bidi.messages;
 import bgu.spl.net.api.bidi.Message;
 
 import java.nio.charset.StandardCharsets;
-import java.util.LinkedList;
 
 public class PmMessage implements Message {
     private short opCode;
@@ -52,8 +51,8 @@ public class PmMessage implements Message {
     }
 
     @Override
-    public boolean encode() {
-        return false;
+    public byte[] encode() {
+        return null;
     }
 
     @Override

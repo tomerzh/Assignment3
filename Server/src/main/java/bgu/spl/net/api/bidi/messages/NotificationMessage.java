@@ -2,9 +2,6 @@ package bgu.spl.net.api.bidi.messages;
 
 import bgu.spl.net.api.bidi.Message;
 
-import java.nio.charset.StandardCharsets;
-import java.util.LinkedList;
-
 public class NotificationMessage implements Message {
     private short opCode = 9;
     private byte notificationType;
@@ -23,8 +20,8 @@ public class NotificationMessage implements Message {
     }
 
     @Override
-    public boolean encode() {
-        return false;
+    public byte[] encode() {
+        return null;
     }
 
     @Override

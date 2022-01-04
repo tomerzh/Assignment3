@@ -3,7 +3,6 @@ package bgu.spl.net.api.bidi.messages;
 import bgu.spl.net.api.bidi.Message;
 
 import java.nio.charset.StandardCharsets;
-import java.util.LinkedList;
 
 public class BlockMessage implements Message {
     private short opCode;
@@ -30,8 +29,8 @@ public class BlockMessage implements Message {
     }
 
     @Override
-    public boolean encode() {
-        return false;
+    public byte[] encode() {
+        return null;
     }
 
     @Override
