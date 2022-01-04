@@ -7,6 +7,10 @@ import java.util.LinkedList;
 
 public class StatMessage implements Message {
     private short opCode;
+    private LinkedList<String> listOfUsernames;
+
+    private int startByte;
+    private int endByte;
 
     public StatMessage() {
 
@@ -14,7 +18,24 @@ public class StatMessage implements Message {
 
     @Override
     public boolean decode(byte[] bytesArr) {
-        return false;
+        listOfUsernames = new LinkedList<>();
+        byte[] codeInBytes = {bytesArr[0], bytesArr[1]};
+        opCode = bytesToShort(codeInBytes);
+        startByte = 2;
+        endByte = 2;
+
+        while (bytesArr[endByte] != '\0') {
+            if (bytesArr[endByte] == '|') {
+                String username = popString(bytesArr);
+                listOfUsernames.add(username);
+                endByte = endByte + 1;
+                startByte = endByte;
+            }
+            else {
+                endByte++;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -27,8 +48,18 @@ public class StatMessage implements Message {
         return opCode;
     }
 
+    public LinkedList<String> getListOfUsernames() {
+        return listOfUsernames;
+    }
+
     private String popString(byte[] bytes) {
-        String result = new String(bytes, StandardCharsets.UTF_8);
+        String result = new String(bytes, startByte, endByte - 1, StandardCharsets.UTF_8);
+        return result;
+    }
+
+    public short bytesToShort(byte[] byteArr) {
+        short result = (short)((byteArr[0] & 0xff) << 8);
+        result += (short)(byteArr[1] & 0xff);
         return result;
     }
 }
