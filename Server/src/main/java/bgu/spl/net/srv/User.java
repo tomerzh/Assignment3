@@ -2,12 +2,7 @@ package bgu.spl.net.srv;
 
 import bgu.spl.net.api.bidi.messages.NotificationMessage;
 import bgu.spl.net.api.bidi.messages.PmMessage;
-import sun.misc.Queue;
-
-import java.util.LinkedList;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public class User {
     private boolean loggedIn = false;
@@ -125,18 +120,16 @@ public class User {
         }
     }
 
-    public boolean isBlocked(String user){
-        if(blocked.isEmpty()){
-        }
-
-        else{
-            for(User blockedUser : blocked){
-                if(blockedUser.getUsername() == user){
+    public boolean isBlocked(String user) {
+        if (blocked.isEmpty()) {
+        } else {
+            for (User blockedUser : blocked) {
+                if (blockedUser.getUsername() == user) {
                     return true;
                 }
             }
         }
         return false;
-
+    }
 
 }
