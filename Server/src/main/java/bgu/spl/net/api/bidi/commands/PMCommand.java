@@ -37,7 +37,9 @@ public class PMCommand implements Command {
         else {
             myUser = userRegistry.getUser(myUsername);
             otherUsername = pmMessage.getUsername();
-            if (!userRegistry.isUserRegistered(otherUsername)) {
+
+            //if other user not registered or is blocked by myUser
+            if (!userRegistry.isUserRegistered(otherUsername) || myUser.isBlocked(otherUser)) {
                 ErrorMessage error = new ErrorMessage(pmMessage.getOpCode());
                 connections.send(connId, error); //error other user is not registered
             }

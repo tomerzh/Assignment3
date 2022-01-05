@@ -37,9 +37,9 @@ public class FollowCommand implements Command {
             otherUsername = followMessage.getUsername();
             otherUser = userRegistry.getUser(otherUsername);
             if(followOrUnfollow) { //for follow
-                if (myUser.getFollowing().contains(otherUser)) {
+                if (myUser.getFollowing().contains(otherUser) || myUser.isBlocked(otherUser)) {
                     ErrorMessage error = new ErrorMessage(followMessage.getOpCode());
-                    connections.send(connId, error); //error already following this user
+                    connections.send(connId, error); //error already following this user or this user is blocked
                 }
                 else {
                     myUser.addFollow(otherUser);
