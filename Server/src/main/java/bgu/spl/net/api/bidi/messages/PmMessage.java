@@ -17,7 +17,7 @@ public class PmMessage implements Message {
     }
 
     @Override
-    public boolean decode(byte[] bytesArr) {
+    public void decode(byte[] bytesArr) {
         byte[] codeInBytes = {bytesArr[0], bytesArr[1]};
         opCode = bytesToShort(codeInBytes);
 
@@ -33,7 +33,6 @@ public class PmMessage implements Message {
             len++;
         }
         content = popString(bytesContent);
-        return true;
     }
 
     @Override

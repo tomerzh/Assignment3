@@ -18,7 +18,7 @@ public class FollowMessage implements Message {
     }
 
     @Override
-    public boolean decode(byte[] bytesArr) {
+    public void decode(byte[] bytesArr) {
         byte[] codeInBytes = {bytesArr[0], bytesArr[1]};
         opCode = bytesToShort(codeInBytes);
         if(bytesArr[2] == 0){
@@ -30,7 +30,6 @@ public class FollowMessage implements Message {
             len++;
         }
         username = popString(bytesUsername);
-        return true;
     }
 
     @Override

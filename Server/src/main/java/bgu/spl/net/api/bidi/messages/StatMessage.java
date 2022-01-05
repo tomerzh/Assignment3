@@ -18,7 +18,7 @@ public class StatMessage implements Message {
     }
 
     @Override
-    public boolean decode(byte[] bytesArr) {
+    public void decode(byte[] bytesArr) {
         listOfUsernames = new LinkedList<>();
         byte[] codeInBytes = {bytesArr[0], bytesArr[1]};
         opCode = bytesToShort(codeInBytes);
@@ -30,7 +30,6 @@ public class StatMessage implements Message {
         }
         listUsers = popString(bytesList);
         findUsers();
-        return true;
     }
 
     @Override

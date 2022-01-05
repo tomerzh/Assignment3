@@ -42,8 +42,8 @@ public class AckMessage implements Message {
     }
 
     @Override
-    public boolean decode(byte[] bytesArr) {
-        return false;
+    public void decode(byte[] bytesArr) {
+
     }
 
     @Override
