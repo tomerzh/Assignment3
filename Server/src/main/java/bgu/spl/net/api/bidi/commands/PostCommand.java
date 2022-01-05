@@ -32,11 +32,10 @@ public class PostCommand implements Command {
         User currUser = userRegistry.getUser(userName);
 
         if(currUser.isLoggedIn()){
-            ConcurrentLinkedQueue<User> blocked = currUser.getBlockingList();
             boolean err = false;
             //checks if @user is blocked user or unregistered
             for(String name : usersToSend){
-                if(blocked.contains(userRegistry.getUser(name)) || !(userRegistry.isUserRegistered(name))){
+                if(currUser.isBlocked(name) || !(userRegistry.isUserRegistered(name))){
                     err = true;
                 }
             }
@@ -60,12 +59,12 @@ public class PostCommand implements Command {
                 }
 
                 AckMessage ack = new AckMessage(currMessage.getOpCode());
-                connections.send(connId, ack);
+                this.connections.send(connId, ack);
             }
 
             else{
                 ErrorMessage error = new ErrorMessage(currMessage.getOpCode());
-                connections.send(connId, error);
+                this.connections.send(connId, error);
             }
         }
 

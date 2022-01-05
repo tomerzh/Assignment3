@@ -41,8 +41,10 @@ public class StatCommand implements Command {
         }
         else {
             listOfUsernames = statMessage.getListOfUsernames();
+            User myUser = userRegistry.getUser(myUsername);
             for (String username : listOfUsernames) {
-                if (!userRegistry.isUserRegistered(username)){
+                //send error if user in list not exists or blocked
+                if (!userRegistry.isUserRegistered(username) || myUser.isBlocked(username)){
                     ErrorMessage error = new ErrorMessage(statMessage.getOpCode());
                     connections.send(connId, error);
                     break;

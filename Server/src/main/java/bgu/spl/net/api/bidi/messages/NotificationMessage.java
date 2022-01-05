@@ -2,6 +2,9 @@ package bgu.spl.net.api.bidi.messages;
 
 import bgu.spl.net.api.bidi.Message;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+
 public class NotificationMessage implements Message {
     private short opCode = 9;
     private byte notificationType;
@@ -21,7 +24,36 @@ public class NotificationMessage implements Message {
 
     @Override
     public byte[] encode() {
-        return null;
+        byte[] bytesArrOp = new byte[2];
+        bytesArrOp[0] = (byte)((opCode >> 8) & 0xFF);
+        bytesArrOp[1] = (byte)(opCode & 0xFF);
+
+        byte[] bytesArrType = new byte[notificationType];
+
+        byte[] bytesArrPostingUser = postingUser.getBytes(StandardCharsets.UTF_8);
+        int postingUserArrSize = bytesArrPostingUser.length;
+
+        byte[] bytesArrContent = Content.getBytes(StandardCharsets.UTF_8);
+        int contentArrSize = bytesArrContent.length;
+
+        byte[] byteArrBackSlash = "\0".getBytes(StandardCharsets.UTF_8);
+        int backSlashArrSize = byteArrBackSlash.length;
+
+        byte[] bytesArrEnd = ";".getBytes(StandardCharsets.UTF_8);
+        int sizeEnd = bytesArrEnd.length;
+
+        ByteBuffer buffer = ByteBuffer.wrap(new byte[2+1+postingUserArrSize+
+                                backSlashArrSize+contentArrSize+backSlashArrSize+sizeEnd]);
+
+        buffer.put(bytesArrOp);
+        buffer.put(bytesArrType);
+        buffer.put(bytesArrPostingUser);
+        buffer.put(byteArrBackSlash);
+        buffer.put(bytesArrContent);
+        buffer.put(byteArrBackSlash);
+        buffer.put(bytesArrEnd);
+
+        return buffer.array();
     }
 
     @Override

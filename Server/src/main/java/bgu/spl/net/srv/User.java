@@ -115,7 +115,28 @@ public class User {
         blocked.add(user);
     }
 
-    public ConcurrentLinkedQueue<User> getBlockingList(){
-        return blocked;
+    public boolean isBlocked(User user){
+        if(blocked.isEmpty()){
+            return false;
+        }
+
+        else{
+            return blocked.contains(user);
+        }
     }
+
+    public boolean isBlocked(String user){
+        if(blocked.isEmpty()){
+        }
+
+        else{
+            for(User blockedUser : blocked){
+                if(blockedUser.getUsername() == user){
+                    return true;
+                }
+            }
+        }
+        return false;
+
+
 }

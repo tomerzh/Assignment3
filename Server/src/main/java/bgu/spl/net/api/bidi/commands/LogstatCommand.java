@@ -38,8 +38,9 @@ public class LogstatCommand implements Command {
         }
         else {
             LinkedList<User> users = userRegistry.getAllRegisteredUsers();
+            User myUser = userRegistry.getUser(myUsername);
             for (User user: users) {
-                if (user.isLoggedIn()){
+                if (user.isLoggedIn() && myUser.isBlocked(user)){
                     //calculate age (short)
                     numOfPosts = (short) user.getPosts().size();
                     numOfFollowers = (short) user.getFollowers().size();
