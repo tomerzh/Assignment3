@@ -3,15 +3,14 @@ package bgu.spl.net.api.bidi.messages;
 import bgu.spl.net.api.bidi.Message;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class PmMessage implements Message {
     private short opCode;
     private String username;
     private String content;
-    private String dateAndTime;
 
-    private int startByte;
-    private int endByte;
+    private int len;
 
     public PmMessage() {
 
@@ -21,33 +20,20 @@ public class PmMessage implements Message {
     public boolean decode(byte[] bytesArr) {
         byte[] codeInBytes = {bytesArr[0], bytesArr[1]};
         opCode = bytesToShort(codeInBytes);
-        startByte = 2;
-        endByte = 2;
-        int numOfArgument = 1;
 
-        while (bytesArr[endByte] != ';') {
-            if(bytesArr[endByte] == '\0') {
-                String str = popString(bytesArr);
-                switch (numOfArgument){
-                    case 1:
-                        username = str;
-                        break;
-                    case 2:
-                        content = str;
-                        break;
-                    case 3:
-                        dateAndTime = str;
-                        break;
-                }
-                endByte = endByte + 1;
-                startByte = endByte;
-                numOfArgument++;
-            }
-            else {
-                endByte++;
-            }
+        byte[] bytesUsername = Arrays.copyOfRange(bytesArr, 2, bytesArr.length);
+        len = 0;
+        while (bytesUsername[len] != '\0') {
+            len++;
         }
-        return username != null && content != null && dateAndTime != null;
+        username = popString(bytesUsername);
+        byte[] bytesContent = Arrays.copyOfRange(bytesUsername, len+1, bytesUsername.length);
+        len = 0;
+        while (bytesContent[len] != '\0') {
+            len++;
+        }
+        content = popString(bytesContent);
+        return true;
     }
 
     @Override
@@ -68,12 +54,8 @@ public class PmMessage implements Message {
         return content;
     }
 
-    public String getDateAndTime() {
-        return dateAndTime;
-    }
-
     private String popString(byte[] bytes) {
-        String result = new String(bytes, startByte, (endByte-1), StandardCharsets.UTF_8);
+        String result = new String(bytes, 0, len, StandardCharsets.UTF_8);
         return result;
     }
 

@@ -6,6 +6,7 @@ import sun.misc.Queue;
 
 import java.util.LinkedList;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class User {
@@ -13,25 +14,25 @@ public class User {
     private String username;
     private String password;
     private String birthday;
-    private LinkedBlockingQueue<User> following;
-    private LinkedBlockingQueue<User> followers;
-    private LinkedBlockingQueue<String> posts;
-    private LinkedBlockingQueue<PmMessage> privateMessages;
-    private LinkedBlockingQueue<NotificationMessage> incomingPosts;
-    private LinkedBlockingQueue<NotificationMessage> incomingPMs;
-    private LinkedBlockingQueue<User> blocked;
+    private ConcurrentLinkedQueue<User> following;
+    private ConcurrentLinkedQueue<User> followers;
+    private ConcurrentLinkedQueue<String> posts;
+    private ConcurrentLinkedQueue<PmMessage> privateMessages;
+    private ConcurrentLinkedQueue<NotificationMessage> incomingPosts;
+    private ConcurrentLinkedQueue<NotificationMessage> incomingPMs;
+    private ConcurrentLinkedQueue<User> blocked;
 
     public User(String username, String password, String birthday){
         this.username = username;
         this.password = password;
         this.birthday = birthday;
-        following = new LinkedBlockingQueue<>();
-        followers = new LinkedBlockingQueue<>();
-        posts = new LinkedBlockingQueue<>();
-        privateMessages = new LinkedBlockingQueue<>();
-        incomingPosts = new LinkedBlockingQueue<>();
-        incomingPMs = new LinkedBlockingQueue<>();
-        blocked = new LinkedBlockingQueue<>();
+        following = new ConcurrentLinkedQueue<>();
+        followers = new ConcurrentLinkedQueue<>();
+        posts = new ConcurrentLinkedQueue<>();
+        privateMessages = new ConcurrentLinkedQueue<>();
+        incomingPosts = new ConcurrentLinkedQueue<>();
+        incomingPMs = new ConcurrentLinkedQueue<>();
+        blocked = new ConcurrentLinkedQueue<>();
     }
 
     public String getUsername() {
@@ -46,27 +47,27 @@ public class User {
         return birthday;
     }
 
-    public LinkedBlockingQueue<User> getFollowing() {
+    public ConcurrentLinkedQueue<User> getFollowing() {
         return following;
     }
 
-    public LinkedBlockingQueue<User> getFollowers() {
+    public ConcurrentLinkedQueue<User> getFollowers() {
         return followers;
     }
 
-    public LinkedBlockingQueue<String> getPosts() {
+    public ConcurrentLinkedQueue<String> getPosts() {
         return posts;
     }
 
-    public LinkedBlockingQueue<PmMessage> getPrivateMessages() {
+    public ConcurrentLinkedQueue<PmMessage> getPrivateMessages() {
         return privateMessages;
     }
 
-    public LinkedBlockingQueue<NotificationMessage> getIncomingPosts() {
+    public ConcurrentLinkedQueue<NotificationMessage> getIncomingPosts() {
         return incomingPosts;
     }
 
-    public LinkedBlockingQueue<NotificationMessage> getIncomingPMs() {
+    public ConcurrentLinkedQueue<NotificationMessage> getIncomingPMs() {
         return incomingPMs;
     }
 
@@ -136,7 +137,6 @@ public class User {
             }
         }
         return false;
-    }
 
 
 }

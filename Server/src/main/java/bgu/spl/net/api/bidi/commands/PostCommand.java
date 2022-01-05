@@ -9,6 +9,7 @@ import bgu.spl.net.srv.UserRegistry;
 import bgu.spl.net.srv.bidi.ConnectionsImpl;
 
 import java.util.LinkedList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class PostCommand implements Command {
