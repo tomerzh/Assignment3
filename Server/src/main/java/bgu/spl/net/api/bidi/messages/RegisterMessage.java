@@ -3,6 +3,7 @@ package bgu.spl.net.api.bidi.messages;
 import bgu.spl.net.api.bidi.Message;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class RegisterMessage implements Message {
     private short opCode;
@@ -10,7 +11,6 @@ public class RegisterMessage implements Message {
     private String password;
     private String birthday;
 
-    private int startByte;
     private int len;
 
     public RegisterMessage() {
@@ -21,33 +21,26 @@ public class RegisterMessage implements Message {
     public boolean decode(byte[] bytesArr) {
         byte[] codeInBytes = {bytesArr[0], bytesArr[1]};
         opCode = bytesToShort(codeInBytes);
-        startByte = 2;
+        byte[] bytesUsername = Arrays.copyOfRange(bytesArr, 2, bytesArr.length);
         len = 0;
-        int numOfArgument = 1;
-
-        while (bytesArr[startByte+len] != ';') {
-            if(bytesArr[startByte+len] == '\0') {
-                String str = popString(bytesArr);
-                switch (numOfArgument){
-                    case 1:
-                        username = str;
-                        break;
-                    case 2:
-                        password = str;
-                        break;
-                    case 3:
-                        birthday = str;
-                        break;
-                }
-                len = len + 1;
-                startByte = len;
-                numOfArgument++;
-            }
-            else {
-                len++;
-            }
+        while (bytesUsername[len] != '\0') {
+            len++;
         }
-        return username != null && password != null && birthday != null;
+        username = popString(bytesUsername);
+        byte[] bytesPassword = Arrays.copyOfRange(bytesUsername, len+1, bytesUsername.length);
+        len = 0;
+        while (bytesPassword[len] != '\0') {
+            len++;
+        }
+        password = popString(bytesPassword);
+        byte[] bytesBirthday = Arrays.copyOfRange(bytesPassword, len+1, bytesPassword.length);
+        len = 0;
+        while (bytesBirthday[len] != '\0') {
+            len++;
+        }
+        birthday = popString(bytesBirthday);
+
+        return true;
     }
 
     @Override
@@ -73,8 +66,7 @@ public class RegisterMessage implements Message {
     }
 
     private String popString(byte[] bytes) {
-        String result = new String(bytes, startByte, len, StandardCharsets.UTF_8);
-        len = 0;
+        String result = new String(bytes, 0, len, StandardCharsets.UTF_8);
         return result;
     }
 
