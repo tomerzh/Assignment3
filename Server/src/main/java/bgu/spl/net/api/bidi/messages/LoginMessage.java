@@ -3,6 +3,7 @@ package bgu.spl.net.api.bidi.messages;
 import bgu.spl.net.api.bidi.Message;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class LoginMessage implements Message {
     private short opCode;
@@ -10,8 +11,7 @@ public class LoginMessage implements Message {
     private String password;
     private byte captcha;
 
-    private int startByte;
-    private int endByte;
+    private int len;
 
     public LoginMessage() {
 
@@ -22,32 +22,21 @@ public class LoginMessage implements Message {
         byte[] codeInBytes = {bytesArr[0], bytesArr[1]};
         opCode = bytesToShort(codeInBytes);
 
-        startByte = 2;
-        endByte = 2;
-        int numOfArgument = 1;
-
-        while (bytesArr[endByte] != ';') {
-            if(bytesArr[endByte] == '\0') {
-                String str = popString(bytesArr);
-                switch (numOfArgument){
-                    case 1:
-                        username = str;
-                        break;
-                    case 2:
-                        password = str;
-                        break;
-                }
-                endByte = endByte + 1;
-                startByte = endByte;
-                numOfArgument++;
-            }
-            else {
-                endByte++;
-            }
+        byte[] bytesUsername = Arrays.copyOfRange(bytesArr, 2, bytesArr.length);
+        len = 0;
+        while (bytesUsername[len] != '\0') {
+            len++;
         }
-        captcha = bytesArr[startByte]; //the last byte before the ';' char
+        username = popString(bytesUsername);
+        byte[] bytesPassword = Arrays.copyOfRange(bytesUsername, len+1, bytesUsername.length);
+        len = 0;
+        while (bytesPassword[len] != '\0') {
+            len++;
+        }
+        password = popString(bytesPassword);
+        captcha = bytesPassword[len+1];
 
-        return username != null && password != null;
+        return true;
     }
 
     @Override
@@ -62,7 +51,7 @@ public class LoginMessage implements Message {
 
 
     private String popString(byte[] bytes) {
-        String result = new String(bytes, startByte, (endByte-1), StandardCharsets.UTF_8);
+        String result = new String(bytes, 0, len, StandardCharsets.UTF_8);
         return result;
     }
 

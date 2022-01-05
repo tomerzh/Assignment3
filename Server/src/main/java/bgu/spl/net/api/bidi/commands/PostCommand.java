@@ -9,6 +9,7 @@ import bgu.spl.net.srv.UserRegistry;
 import bgu.spl.net.srv.bidi.ConnectionsImpl;
 
 import java.util.LinkedList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class PostCommand implements Command {
@@ -31,7 +32,7 @@ public class PostCommand implements Command {
         User currUser = userRegistry.getUser(userName);
 
         if(currUser.isLoggedIn()){
-            LinkedBlockingQueue<User> blocked = currUser.getBlockingList();
+            ConcurrentLinkedQueue<User> blocked = currUser.getBlockingList();
             boolean err = false;
             //checks if @user is blocked user or unregistered
             for(String name : usersToSend){

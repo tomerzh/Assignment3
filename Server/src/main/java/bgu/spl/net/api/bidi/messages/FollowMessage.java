@@ -3,12 +3,15 @@ package bgu.spl.net.api.bidi.messages;
 import bgu.spl.net.api.bidi.Message;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 
 public class FollowMessage implements Message {
     private short opCode;
     private boolean followOrUnfollow = false;
     private String username;
+
+    private int len;
 
     public FollowMessage() {
 
@@ -21,7 +24,12 @@ public class FollowMessage implements Message {
         if(bytesArr[2] == 0){
             followOrUnfollow = true;
         }
-        username = popString(bytesArr);
+        byte[] bytesUsername = Arrays.copyOfRange(bytesArr, 3, bytesArr.length);
+        len = 0;
+        while (bytesUsername[len] != '\0') {
+            len++;
+        }
+        username = popString(bytesUsername);
         return true;
     }
 
@@ -44,7 +52,7 @@ public class FollowMessage implements Message {
     }
 
     private String popString(byte[] bytes) {
-        String result = new String(bytes, 3, bytes.length - 1, StandardCharsets.UTF_8);
+        String result = new String(bytes, 0, len, StandardCharsets.UTF_8);
         return result;
     }
 

@@ -3,11 +3,13 @@ package bgu.spl.net.api.bidi.messages;
 import bgu.spl.net.api.bidi.Message;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class BlockMessage implements Message {
     private short opCode;
     private String username;
-    private int endByte;
+
+    private int len;
 
     public BlockMessage() {
 
@@ -18,13 +20,12 @@ public class BlockMessage implements Message {
         byte[] codeInBytes = {bytesArr[0], bytesArr[1]};
         opCode = bytesToShort(codeInBytes);
 
-        endByte = 2;
-        while (bytesArr[endByte] != ';') {
-            if (bytesArr[endByte] == '\0') {
-                username = popString(bytesArr);
-            }
-            endByte++;
+        byte[] bytesUsername = Arrays.copyOfRange(bytesArr, 2, bytesArr.length);
+        len = 0;
+        while (bytesUsername[len] != '\0') {
+            len++;
         }
+        username = popString(bytesUsername);
         return true;
     }
 
@@ -43,7 +44,7 @@ public class BlockMessage implements Message {
     }
 
     private String popString(byte[] bytes) {
-        String result = new String(bytes, 2, endByte, StandardCharsets.UTF_8);
+        String result = new String(bytes, 0, len, StandardCharsets.UTF_8);
         return result;
     }
 

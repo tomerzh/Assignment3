@@ -3,6 +3,7 @@ package bgu.spl.net.api.bidi.messages;
 import bgu.spl.net.api.bidi.Message;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class PostMessage implements Message {
@@ -10,7 +11,7 @@ public class PostMessage implements Message {
     private String content;
     private LinkedList<String> usersToSend;
 
-    private int endByte;
+    private int len;
 
     public PostMessage() {
         usersToSend = new LinkedList<String>();
@@ -20,14 +21,13 @@ public class PostMessage implements Message {
     public boolean decode(byte[] bytesArr) {
         byte[] codeInBytes = {bytesArr[0], bytesArr[1]};
         opCode = bytesToShort(codeInBytes);
-
-        endByte = 2;
-        while (bytesArr[endByte] != ';') {
-            if (bytesArr[endByte] == '\0') {
-                content = popString(bytesArr);
-            }
-            endByte++;
+        byte[] bytesContent = Arrays.copyOfRange(bytesArr, 2, bytesArr.length);
+        len = 0;
+        while (bytesContent[len] != '\0') {
+            len++;
         }
+        content = popString(bytesContent);
+        findTaggedUsers();
         return true;
     }
 
@@ -41,8 +41,18 @@ public class PostMessage implements Message {
         return opCode;
     }
 
+    private void findTaggedUsers() {
+        String[] split = content.split(" ");
+        for (String word : split) {
+            if (word.charAt(0) == '@') {
+                String username = word.substring(1);
+                usersToSend.add(username);
+            }
+        }
+    }
+
     private String popString(byte[] bytes) {
-        String result = new String(bytes, 2, (endByte-1), StandardCharsets.UTF_8);
+        String result = new String(bytes, 0, len, StandardCharsets.UTF_8);
         return result;
     }
 

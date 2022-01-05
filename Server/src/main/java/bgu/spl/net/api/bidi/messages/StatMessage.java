@@ -3,14 +3,15 @@ package bgu.spl.net.api.bidi.messages;
 import bgu.spl.net.api.bidi.Message;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class StatMessage implements Message {
     private short opCode;
+    private String listUsers;
     private LinkedList<String> listOfUsernames;
 
-    private int startByte;
-    private int endByte;
+    private int len;
 
     public StatMessage() {
 
@@ -21,20 +22,14 @@ public class StatMessage implements Message {
         listOfUsernames = new LinkedList<>();
         byte[] codeInBytes = {bytesArr[0], bytesArr[1]};
         opCode = bytesToShort(codeInBytes);
-        startByte = 2;
-        endByte = 2;
 
-        while (bytesArr[endByte] != '\0') {
-            if (bytesArr[endByte] == '|') {
-                String username = popString(bytesArr);
-                listOfUsernames.add(username);
-                endByte = endByte + 1;
-                startByte = endByte;
-            }
-            else {
-                endByte++;
-            }
+        byte[] bytesList = Arrays.copyOfRange(bytesArr, 2, bytesArr.length);
+        len = 0;
+        while (bytesList[len] != '\0') {
+            len++;
         }
+        listUsers = popString(bytesList);
+        findUsers();
         return true;
     }
 
@@ -52,8 +47,13 @@ public class StatMessage implements Message {
         return listOfUsernames;
     }
 
+    private void findUsers() {
+        String[] split = listUsers.split("\\|");
+        listOfUsernames.addAll(Arrays.asList(split));
+    }
+
     private String popString(byte[] bytes) {
-        String result = new String(bytes, startByte, (endByte-1), StandardCharsets.UTF_8);
+        String result = new String(bytes, 0, len, StandardCharsets.UTF_8);
         return result;
     }
 
