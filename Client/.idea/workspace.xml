@@ -108,6 +108,7 @@
     <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="oldMeFiltersMigrated" value="true" />
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
