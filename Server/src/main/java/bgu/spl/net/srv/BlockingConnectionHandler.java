@@ -75,4 +75,8 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
         }
     }
 
+    public void disconnect(){
+        this.protocol.shouldTerminate();
+    }
+
 }

@@ -51,7 +51,8 @@ public class StatCommand implements Command {
                 }
                 else {
                     currUser = userRegistry.getUser(username);
-                    //calculate age (short)
+                    Integer ageInt = 2022 - currUser.getYearOfBirth();
+                    age = ageInt.shortValue();
                     numOfPosts = (short) currUser.getPosts().size();
                     numOfFollowers = (short) currUser.getFollowers().size();
                     numFollowing = (short) currUser.getFollowing().size();

@@ -17,11 +17,10 @@ public class LogoutCommand implements Command {
     private LogoutMessage currMessage = null;
     private UserRegistry userRegistry;
     private ConnectionsImpl connections = null;
-    private BGSBidiMessagingProtocol protocol;
 
-    public LogoutCommand(BGSBidiMessagingProtocol protocol){
+
+    public LogoutCommand(){
        userRegistry = UserRegistry.getInstance();
-       this.protocol = protocol;
     }
 
     @Override
@@ -33,9 +32,11 @@ public class LogoutCommand implements Command {
         //check if connected, if true, logout user
         if(this.connections.getUsername(connId)!=null){
             currUser.setLoggedIn(false);
+
+            this.connections.disconnect(connId);
             this.connections.removeUser(userName);
             this.connections.removeClient(connId);
-            protocol.terminate();
+
             AckMessage ack = new AckMessage(currMessage.getOpCode());
             connections.send(connId, ack);
         }

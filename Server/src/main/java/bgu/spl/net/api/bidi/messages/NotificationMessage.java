@@ -36,7 +36,9 @@ public class NotificationMessage implements Message {
         byte[] bytesArrContent = Content.getBytes(StandardCharsets.UTF_8);
         int contentArrSize = bytesArrContent.length;
 
-        byte[] byteArrBackSlash = "\0".getBytes(StandardCharsets.UTF_8);
+        byte[] byteArrBackSlash = new byte[2];
+        byteArrBackSlash[0] = (byte)(('0' >> 8) & 0xFF);
+        byteArrBackSlash[1] = (byte)('0' & 0xFF);
         int backSlashArrSize = byteArrBackSlash.length;
 
         byte[] bytesArrEnd = ";".getBytes(StandardCharsets.UTF_8);

@@ -66,6 +66,12 @@ public class User {
         return incomingPMs;
     }
 
+    public Integer getYearOfBirth(){
+        String sYear = birthday.substring(6);
+        Integer year = Integer.valueOf(sYear);
+        return year;
+    }
+
     public boolean isLoggedIn() {
         return loggedIn;
     }

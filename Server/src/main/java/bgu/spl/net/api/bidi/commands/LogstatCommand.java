@@ -41,7 +41,8 @@ public class LogstatCommand implements Command {
             User myUser = userRegistry.getUser(myUsername);
             for (User user: users) {
                 if (user.isLoggedIn() && myUser.isBlocked(user)){
-                    //calculate age (short)
+                    Integer ageInt = 2022 - user.getYearOfBirth();
+                    age = ageInt.shortValue();
                     numOfPosts = (short) user.getPosts().size();
                     numOfFollowers = (short) user.getFollowers().size();
                     numFollowing = (short) user.getFollowing().size();
