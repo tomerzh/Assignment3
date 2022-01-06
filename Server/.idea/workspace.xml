@@ -44,7 +44,7 @@
     <configuration name="TPCMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="bgu.spl.net.srv.TPCMain" />
       <module name="Server" />
-      <option name="PROGRAM_PARAMETERS" value="7778" />
+      <option name="PROGRAM_PARAMETERS" value="7777" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="bgu.spl.net.srv.*" />
