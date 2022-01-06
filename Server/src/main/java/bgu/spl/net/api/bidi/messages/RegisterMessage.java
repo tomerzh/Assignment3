@@ -18,7 +18,7 @@ public class RegisterMessage implements Message {
     }
 
     @Override
-    public boolean decode(byte[] bytesArr) {
+    public void decode(byte[] bytesArr) {
         byte[] codeInBytes = {bytesArr[0], bytesArr[1]};
         opCode = bytesToShort(codeInBytes);
         byte[] bytesUsername = Arrays.copyOfRange(bytesArr, 2, bytesArr.length);
@@ -39,8 +39,6 @@ public class RegisterMessage implements Message {
             len++;
         }
         birthday = popString(bytesBirthday);
-
-        return true;
     }
 
     @Override

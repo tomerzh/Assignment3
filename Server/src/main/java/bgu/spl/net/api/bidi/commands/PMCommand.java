@@ -1,5 +1,6 @@
 package bgu.spl.net.api.bidi.commands;
 
+import bgu.spl.net.api.FilteredWords;
 import bgu.spl.net.api.bidi.Command;
 import bgu.spl.net.api.bidi.Connections;
 import bgu.spl.net.api.bidi.Message;
@@ -11,6 +12,8 @@ import bgu.spl.net.srv.User;
 import bgu.spl.net.srv.UserRegistry;
 import bgu.spl.net.srv.bidi.ConnectionsImpl;
 
+import java.util.Set;
+
 public class PMCommand implements Command {
     private UserRegistry userRegistry;
     private PmMessage pmMessage;
@@ -20,6 +23,8 @@ public class PMCommand implements Command {
     private String otherUsername;
     private User otherUser;
     private ConnectionsImpl conn = null;
+
+    private String content;
 
     public PMCommand() {
         userRegistry = UserRegistry.getInstance();
@@ -50,10 +55,9 @@ public class PMCommand implements Command {
                     connections.send(connId, error); //error not following the recipient user
                 }
                 else {
-                    //filter the message todo
+                    content = FilteredWords.filterWords(pmMessage.getContent());
                     myUser.addPM(pmMessage);
-                    NotificationMessage notification = new NotificationMessage((byte) 0, myUsername,
-                            pmMessage.getContent());
+                    NotificationMessage notification = new NotificationMessage((byte) 0, myUsername, content);
                     sendNotification(notification, otherUser);
 
                     AckMessage ack = new AckMessage(pmMessage.getOpCode());

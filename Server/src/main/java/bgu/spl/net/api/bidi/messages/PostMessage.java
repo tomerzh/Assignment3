@@ -18,7 +18,7 @@ public class PostMessage implements Message {
     }
 
     @Override
-    public boolean decode(byte[] bytesArr) {
+    public void decode(byte[] bytesArr) {
         byte[] codeInBytes = {bytesArr[0], bytesArr[1]};
         opCode = bytesToShort(codeInBytes);
         byte[] bytesContent = Arrays.copyOfRange(bytesArr, 2, bytesArr.length);
@@ -28,7 +28,6 @@ public class PostMessage implements Message {
         }
         content = popString(bytesContent);
         findTaggedUsers();
-        return true;
     }
 
     @Override

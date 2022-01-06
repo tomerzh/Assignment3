@@ -1,7 +1,7 @@
 package bgu.spl.net.api.bidi;
 
 public interface Message {
-    boolean decode(byte[] bytesArr);
+    void decode(byte[] bytesArr);
 
     byte[] encode();
 
