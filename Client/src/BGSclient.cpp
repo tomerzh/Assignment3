@@ -31,4 +31,6 @@ int main (int argc, char *argv[]) {
 
     th1.join();
     th2.join();
+
+    return 0;
 }
