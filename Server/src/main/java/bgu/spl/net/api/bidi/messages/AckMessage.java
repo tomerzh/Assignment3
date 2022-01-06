@@ -23,6 +23,7 @@ public class AckMessage implements Message {
 
     public AckMessage(short commandOpCode) {
         this.commandOpCode = commandOpCode;
+        noOptional = true;
     }
 
     public AckMessage(short commandOpCode, String username) {
