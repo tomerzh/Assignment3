@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <thread>
 #include "../include/connectionHandler.h"
-#include "../include/socketTreadTask.h"
-#include "../include/keyboardThreadTask.h"
+#include "../include/socketThread.h"
+#include "../include/keyboardThread.h"
 using boost::asio::ip::tcp;
 
 /**
@@ -23,3 +23,4 @@ int main (int argc, char *argv[]) {
         return 1;
     }
 
+}
