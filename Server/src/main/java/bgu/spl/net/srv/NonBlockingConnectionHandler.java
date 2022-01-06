@@ -116,4 +116,6 @@ public class NonBlockingConnectionHandler<T> implements ConnectionHandler<T> {
         BUFFER_POOL.add(buff);
     }
 
+    // TODO: 05/01/2022 add disconnect func as in blockingCH
+
 }

@@ -1,5 +1,6 @@
 package bgu.spl.net.srv.bidi;
 
+import bgu.spl.net.api.bidi.BGSBidiMessagingProtocol;
 import bgu.spl.net.api.bidi.Connections;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -74,6 +75,6 @@ public class ConnectionsImpl<T> implements Connections<T> {
 
     @Override
     public void disconnect(int connectionId) {
-
+        connIdToHandler.get(connectionId).disconnect();
     }
 }
