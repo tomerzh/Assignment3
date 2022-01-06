@@ -5,9 +5,16 @@
 #ifndef CLIENT_SOCKETTHREAD_H
 #define CLIENT_SOCKETTHREAD_H
 
+#include "connectionHandler.h"
 
 class socketThread {
+private:
+    ConnectionHandler &handler;
+    bool shouldTerminate;
 
+public:
+    socketThread(ConnectionHandler &connectionHandler);
+    void run();
 };
 
 
