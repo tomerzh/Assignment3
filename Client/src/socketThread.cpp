@@ -22,6 +22,8 @@ void socketThread::run() {
         handler.getBytes(opBytes, 2);
         short opCode = bytesToShort(opBytes);
 
+        cout << "opCode: " << opCode << endl;
+
         if (opCode == 9) { //Notification
             char typeBytes[1];
             handler.getBytes(typeBytes, 1);
@@ -42,12 +44,17 @@ void socketThread::run() {
             handler.getFrameAscii(content, '\0');
 
             cout << notification + postingUser + " " + content << endl;
+
+            string end;
+            handler.getFrameAscii(end, ';');
         }
 
         else if(opCode == 10){ //Ack
             char messageOp[2];
             handler.getBytes(messageOp, 2);
             short opMessage = bytesToShort(messageOp);
+
+            cout << "messageOP: " << opMessage << endl;
 
             if(opMessage == 4){//ack for follow
                 string userName;
@@ -75,15 +82,23 @@ void socketThread::run() {
 
                 cout << "ACK" << " " << std::string(std::to_string((int) opMessage))  << " " << age << " "
                 << numOfPosts << " " << numFollowers << " " << numFollowings << endl;
+
+                string end;
+                handler.getFrameAscii(end, ';');
             }
 
-            else if(opMessage == 2){//ack for logout
+            else if(opMessage == 3){//ack for logout
                 cout << "ACK" << " " << std::string(std::to_string((int) opMessage))  << endl;
                 this->shouldTerminate = true;
+
+                string end;
+                handler.getFrameAscii(end, ';');
             }
 
             else{
                 cout << "ACK" << " " << std::string(std::to_string((int) opMessage))  << endl;
+                string end;
+                handler.getFrameAscii(end, ';');
             }
 
         }
@@ -94,6 +109,13 @@ void socketThread::run() {
             short opMessage = bytesToShort(messageOp);
 
             cout << "ERROR" << " " << std::string(std::to_string((int) opMessage))  << endl;
+
+            string end;
+            handler.getFrameAscii(end, ';');
+        }
+
+        else{
+            cout << "no such opCode" << endl;
         }
     }
 };

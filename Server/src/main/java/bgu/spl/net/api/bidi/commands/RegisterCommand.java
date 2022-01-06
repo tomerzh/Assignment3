@@ -37,5 +37,6 @@ public class RegisterCommand implements Command {
             AckMessage ack = new AckMessage(registerMessage.getOpCode());
             connections.send(connId, ack);
         }
+        System.out.println("Register connId is: " + connId);
     }
 }

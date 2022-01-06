@@ -27,10 +27,12 @@ public class LogoutCommand implements Command {
     public void process(Message message, int connId, Connections connections)  {
         this.connections = (ConnectionsImpl) connections;
         this.currMessage = (LogoutMessage) message;
+        System.out.println("Logout connId is: " + connId);
         String userName = this.connections.getUsername(connId);
         User currUser = userRegistry.getUser(userName);
+
         //check if connected, if true, logout user
-        if(this.connections.getUsername(connId)!=null){
+        if(userName != null){
             currUser.setLoggedIn(false);
 
             this.connections.disconnect(connId);
@@ -38,11 +40,12 @@ public class LogoutCommand implements Command {
             this.connections.removeClient(connId);
 
             AckMessage ack = new AckMessage(currMessage.getOpCode());
-            connections.send(connId, ack);
+            this.connections.send(connId, ack);
+            System.out.println("Logout ack sent!");
         }
         else{
             ErrorMessage error = new ErrorMessage(currMessage.getOpCode());
-            connections.send(connId, error);
+            this.connections.send(connId, error);
         }
     }
 }

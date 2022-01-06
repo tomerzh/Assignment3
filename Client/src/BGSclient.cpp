@@ -29,8 +29,7 @@ int main (int argc, char *argv[]) {
     std::thread th1(&socketThread::run, &sock);
     std::thread th2(&keyboardThread::run, &keyboard);
 
-    th1.join();
     th2.join();
-
+    th1.join();
     return 0;
 }

@@ -15,7 +15,6 @@ public class LoginCommand implements Command {
 
     private LoginMessage currMessage = null;
     private UserRegistry userRegistry;
-    private ConnectionsImpl connections = null;
 
 
     public LoginCommand(){
@@ -25,38 +24,38 @@ public class LoginCommand implements Command {
     @Override
     public void process(Message message, int connId, Connections connections) {
         currMessage = (LoginMessage) message;
-        this.connections = (ConnectionsImpl) connections;
-        String userName = ((LoginMessage) message).getUsername();
+        ConnectionsImpl connectionsImpl = (ConnectionsImpl) connections;
+        String userName = currMessage.getUsername();
         if(userRegistry.isUserRegistered(userName)){
             User currUser = userRegistry.getUser(userName);
 
             //invalid user
-            if(currUser.getPassword() != currMessage.getPassword() || currUser.isLoggedIn() ||
+            if(!currUser.getPassword().equals(currMessage.getPassword())|| currUser.isLoggedIn() ||
                 currMessage.getCaptcha() == 0){
                 ErrorMessage error = new ErrorMessage(currMessage.getOpCode());
-                connections.send(connId, error);
+                connectionsImpl.send(connId, error);
             }
             //user can log in
             else{
-                this.connections.addNewUser(userName, connId);
+                connectionsImpl.addNewUser(userName, connId);
                 currUser.setLoggedIn(true);
                 AckMessage ack = new AckMessage(currMessage.getOpCode());
-                this.connections.send(connId, ack);
+                connectionsImpl.send(connId, ack);
 
                 //send to user notifications for unseen posts
                 for(NotificationMessage notification : currUser.getIncomingPosts()){
-                    this.connections.send(connId, notification);
+                    connectionsImpl.send(connId, notification);
                 }
 
                 //send to user notifications for unseen pm
                 for(NotificationMessage notification : currUser.getIncomingPMs()){
-                    this.connections.send(connId, notification);
+                    connectionsImpl.send(connId, notification);
                 }
             }
         }
         else {
             ErrorMessage error = new ErrorMessage(currMessage.getOpCode());
-            this.connections.send(connId, error);
+            connectionsImpl.send(connId, error);
         }
     }
 }
