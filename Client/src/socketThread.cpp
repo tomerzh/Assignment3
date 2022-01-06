@@ -72,17 +72,28 @@ void socketThread::run() {
 
                 handler.getBytes(numFollowingsByte, 2);
                 short numFollowings = bytesToShort(messageOp);
+
+                cout << "ACK" << " " << std::string(std::to_string((int) opMessage))  << " " << age << " "
+                << numOfPosts << " " << numFollowers << " " << numFollowings << endl;
             }
 
             else if(opMessage == 2){//ack for logout
+                cout << "ACK" << " " << std::string(std::to_string((int) opMessage))  << endl;
+                this->shouldTerminate = true;
+            }
 
+            else{
+                cout << "ACK" << " " << std::string(std::to_string((int) opMessage))  << endl;
             }
 
         }
 
         else if(opCode == 11){ // error
+            char messageOp[2];
+            handler.getBytes(messageOp, 2);
+            short opMessage = bytesToShort(messageOp);
 
+            cout << "ERROR" << " " << std::string(std::to_string((int) opMessage))  << endl;
         }
-
     }
 };

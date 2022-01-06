@@ -23,4 +23,12 @@ int main (int argc, char *argv[]) {
         return 1;
     }
 
+    socketThread sock = socketThread(connectionHandler);
+    keyboardThread keyboard = keyboardThread(connectionHandler);
+
+    std::thread th1(&socketThread::run, &sock);
+    std::thread th2(&keyboardThread::run, &keyboard);
+
+    th1.join();
+    th2.join();
 }
