@@ -120,5 +120,6 @@ void socketThread::run() {
         else{
             cout << "no such opCode" << endl;
         }
+        //todo terminate boolean here!!!!!! 
     }
 };
