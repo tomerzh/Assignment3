@@ -112,6 +112,11 @@ public class User {
         incomingPMs.add(pmMessage);
     }
 
+    public void clearPostAndPm(){
+        incomingPMs.clear();
+        incomingPosts.clear();
+    }
+
     public void addBlock(User user){
         blocked.add(user);
     }
@@ -128,11 +133,11 @@ public class User {
 
     public boolean isBlocked(String user) {
         if (blocked.isEmpty()) {
-        } else {
-            for (User blockedUser : blocked) {
-                if (blockedUser.getUsername() == user) {
-                    return true;
-                }
+            return false;
+        }
+        for (User blockedUser : blocked) {
+            if (blockedUser.getUsername().equals(user)) {
+                return true;
             }
         }
         return false;

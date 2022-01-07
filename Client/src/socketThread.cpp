@@ -25,14 +25,14 @@ void socketThread::run() {
         cout << "opCode: " << opCode << endl;
 
         if (opCode == 9) { //Notification
-            char typeBytes[1];
-            handler.getBytes(typeBytes, 1);
+            char typeBytes[2];
+            handler.getBytes(typeBytes, 2);
             short type = bytesToShort(typeBytes);
+
             string notification;
-            if(type == 0){
+            if(type == 0) {
                 notification = "NOTIFICATION PM ";
             }
-
             else{
                 notification = "NOTIFICATION Public ";
             }
@@ -43,7 +43,7 @@ void socketThread::run() {
             string content;
             handler.getFrameAscii(content, '\0');
 
-            cout << notification + postingUser + " " + content << endl;
+            cout << notification + postingUser + " " + content.substr(1, content.length()) << endl;
 
             string end;
             handler.getFrameAscii(end, ';');
@@ -59,26 +59,29 @@ void socketThread::run() {
             if(opMessage == 4){//ack for follow
                 string userName;
                 handler.getFrameAscii(userName, ';');
-                cout << "ACK" << " " << std::string(std::to_string((int) opMessage))  << " " << userName << endl;
+                cout << "ACK" << " " << std::string(std::to_string((int) opMessage))
+                << " " << userName.substr(0, userName.length() - 1) << endl;
             }
 
-            else if(opMessage == 8){//ack for stat
+            else if(opMessage == 8 || opMessage == 7){//ack for stat
+
+
                 char ageByte[2];
                 char numOfPostsByte[2];
                 char numFollowersByte[2];
                 char numFollowingsByte[2];
 
                 handler.getBytes(ageByte, 2);
-                short age = bytesToShort(messageOp);
+                short age = bytesToShort(ageByte);
 
                 handler.getBytes(numOfPostsByte, 2);
-                short numOfPosts = bytesToShort(messageOp);
+                short numOfPosts = bytesToShort(numOfPostsByte);
 
                 handler.getBytes(numFollowersByte, 2);
-                short numFollowers = bytesToShort(messageOp);
+                short numFollowers = bytesToShort(numFollowersByte);
 
                 handler.getBytes(numFollowingsByte, 2);
-                short numFollowings = bytesToShort(messageOp);
+                short numFollowings = bytesToShort(numFollowingsByte);
 
                 cout << "ACK" << " " << std::string(std::to_string((int) opMessage))  << " " << age << " "
                 << numOfPosts << " " << numFollowers << " " << numFollowings << endl;

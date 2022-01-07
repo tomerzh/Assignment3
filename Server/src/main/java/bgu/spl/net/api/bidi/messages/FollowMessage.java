@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 public class FollowMessage implements Message {
     private short opCode;
+    private short follow;
     private boolean followOrUnfollow = false;
     private String username;
 
@@ -21,10 +22,15 @@ public class FollowMessage implements Message {
     public void decode(byte[] bytesArr) {
         byte[] codeInBytes = {bytesArr[0], bytesArr[1]};
         opCode = bytesToShort(codeInBytes);
-        if(bytesArr[2] == 0){
+        byte[] followInBytes = {bytesArr[2], bytesArr[3]};
+        follow = bytesToShort(followInBytes);
+        if(follow == 0){
             followOrUnfollow = true;
         }
-        byte[] bytesUsername = Arrays.copyOfRange(bytesArr, 3, bytesArr.length);
+        else {
+            followOrUnfollow = false;
+        }
+        byte[] bytesUsername = Arrays.copyOfRange(bytesArr, 4, bytesArr.length);
         len = 0;
         while (bytesUsername[len] != '\0') {
             len++;

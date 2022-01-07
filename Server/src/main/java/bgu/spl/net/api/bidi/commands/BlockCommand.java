@@ -27,20 +27,27 @@ public class BlockCommand implements Command {
         currMessage = (BlockMessage) message;
         this.connections = (ConnectionsImpl) connections;
         String currUserName = this.connections.getUsername(connId);
-        User currUser = userRegistry.getUser(currUserName);
-        User blockedUser = userRegistry.getUser(currMessage.getUsername());
-        if(blockedUser != null){
-            //stop follow each other
-            currUser.removeFollow(blockedUser);
-            currUser.removeFollower(blockedUser);
-            blockedUser.removeFollow(currUser);
-            blockedUser.removeFollower(currUser);
-            //blocking each other
-            currUser.addBlock(blockedUser);
-            blockedUser.addBlock(currUser);
+        if(currUserName != null){
+            User currUser = userRegistry.getUser(currUserName);
+            User blockedUser = userRegistry.getUser(currMessage.getUsername());
+            if(blockedUser != null){
+                //stop follow each other
+                currUser.removeFollow(blockedUser);
+                currUser.removeFollower(blockedUser);
+                blockedUser.removeFollow(currUser);
+                blockedUser.removeFollower(currUser);
+                //blocking each other
+                currUser.addBlock(blockedUser);
+                blockedUser.addBlock(currUser);
 
-            AckMessage ack = new AckMessage(currMessage.getOpCode());
-            this.connections.send(connId, ack);
+                AckMessage ack = new AckMessage(currMessage.getOpCode());
+                this.connections.send(connId, ack);
+            }
+
+            else{
+                ErrorMessage error = new ErrorMessage(currMessage.getOpCode());
+                this.connections.send(connId, error);
+            }
         }
 
         else{

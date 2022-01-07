@@ -19,7 +19,7 @@ public class StatCommand implements Command {
     private String myUsername;
     private User currUser;
     private LinkedList<String> listOfUsernames;
-    private LinkedList<AckMessage> ackCommands;
+    private boolean errorOccurred = false;
 
     private short age;
     private short numOfPosts;
@@ -42,9 +42,11 @@ public class StatCommand implements Command {
         else {
             listOfUsernames = statMessage.getListOfUsernames();
             User myUser = userRegistry.getUser(myUsername);
+            LinkedList<AckMessage> ackCommands = new LinkedList<>();
             for (String username : listOfUsernames) {
                 //send error if user in list not exists or blocked
                 if (!userRegistry.isUserRegistered(username) || myUser.isBlocked(username)){
+                    errorOccurred = true;
                     ErrorMessage error = new ErrorMessage(statMessage.getOpCode());
                     connections.send(connId, error);
                     break;
@@ -61,8 +63,10 @@ public class StatCommand implements Command {
                     ackCommands.add(ack);
                 }
             }
-            for (AckMessage ack : ackCommands) {
-                connections.send(connId, ack);
+            if (!errorOccurred) {
+                for (AckMessage ack : ackCommands) {
+                    connections.send(connId, ack);
+                }
             }
         }
     }

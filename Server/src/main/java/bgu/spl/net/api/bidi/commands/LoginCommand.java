@@ -51,6 +51,7 @@ public class LoginCommand implements Command {
                 for(NotificationMessage notification : currUser.getIncomingPMs()){
                     connectionsImpl.send(connId, notification);
                 }
+                currUser.clearPostAndPm();
             }
         }
         else {

@@ -49,6 +49,7 @@ public class AckMessage implements Message {
 
     @Override
     public byte[] encode() {
+        System.out.println("Ack Command opCode is: " + commandOpCode);
         byte[] bytesArrOp = new byte[4];
         bytesArrOp[0] = (byte)((opCode >> 8) & 0xFF);
         bytesArrOp[1] = (byte)(opCode & 0xFF);
@@ -71,14 +72,14 @@ public class AckMessage implements Message {
 
         else if(statCommand){
             byte[] byteArrOptional = new byte[8];
-            bytesArrOp[0] = (byte)((age >> 8) & 0xFF);
-            bytesArrOp[1] = (byte)(age & 0xFF);
-            bytesArrOp[2] = (byte)((numPosts >> 8) & 0xFF);
-            bytesArrOp[3] = (byte)(numPosts & 0xFF);
-            bytesArrOp[4] = (byte)((numFollowers >> 8) & 0xFF);
-            bytesArrOp[5] = (byte)(numFollowers & 0xFF);
-            bytesArrOp[6] = (byte)((numFollowing >> 8) & 0xFF);
-            bytesArrOp[7] = (byte)(numFollowing & 0xFF);
+            byteArrOptional[0] = (byte)((age >> 8) & 0xFF);
+            byteArrOptional[1] = (byte)(age & 0xFF);
+            byteArrOptional[2] = (byte)((numPosts >> 8) & 0xFF);
+            byteArrOptional[3] = (byte)(numPosts & 0xFF);
+            byteArrOptional[4] = (byte)((numFollowers >> 8) & 0xFF);
+            byteArrOptional[5] = (byte)(numFollowers & 0xFF);
+            byteArrOptional[6] = (byte)((numFollowing >> 8) & 0xFF);
+            byteArrOptional[7] = (byte)(numFollowing & 0xFF);
 
             int sizeOptional = byteArrOptional.length;
             buffer = ByteBuffer.wrap(new byte[4+sizeOptional+sizeEnd]);

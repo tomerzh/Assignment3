@@ -32,6 +32,9 @@ public class UserRegistry {
     }
 
     public User getUser(String userName){
+        if (!usernameToUser.containsKey(userName)) {
+            return null;
+        }
         return usernameToUser.get(userName);
     }
 }

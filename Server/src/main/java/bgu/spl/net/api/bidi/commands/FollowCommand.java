@@ -36,33 +36,40 @@ public class FollowCommand implements Command {
             followOrUnfollow = followMessage.isFollowOrUnfollow();
             otherUsername = followMessage.getUsername();
             otherUser = userRegistry.getUser(otherUsername);
-            if(followOrUnfollow) { //for follow
-                if (myUser.getFollowing().contains(otherUser) || myUser.isBlocked(otherUser)) {
-                    ErrorMessage error = new ErrorMessage(followMessage.getOpCode());
-                    connections.send(connId, error); //error already following this user or this user is blocked
-                }
-                else {
-                    myUser.addFollow(otherUser);
-                    otherUser.addFollower(myUser);
-                    AckMessage ack = new AckMessage(followMessage.getOpCode(), otherUsername);
-                    connections.send(connId, ack);
-                }
-            }
-            else { //for unfollow
-                if (!myUser.getFollowing().contains(otherUser)) {
-                    ErrorMessage error = new ErrorMessage(followMessage.getOpCode());
-                    connections.send(connId, error); //error not following this user
-                }
-                else {
-                    if (myUser.removeFollow(otherUser) && otherUser.removeFollower(myUser)) {
+            if (otherUser != null) {
+                if(followOrUnfollow) { //for follow
+                    if (myUser.getFollowing().contains(otherUser) || myUser.isBlocked(otherUser)) {
+                        System.out.println("Error user already following or blocked");
+                        ErrorMessage error = new ErrorMessage(followMessage.getOpCode());
+                        connections.send(connId, error); //error already following this user or this user is blocked
+                    }
+                    else {
+                        myUser.addFollow(otherUser);
+                        otherUser.addFollower(myUser);
                         AckMessage ack = new AckMessage(followMessage.getOpCode(), otherUsername);
                         connections.send(connId, ack);
                     }
-                    else {
+                }
+                else { //for unfollow
+                    if (!myUser.getFollowing().contains(otherUser)) {
                         ErrorMessage error = new ErrorMessage(followMessage.getOpCode());
-                        connections.send(connId, error);
+                        connections.send(connId, error); //error not following this user
+                    }
+                    else {
+                        if (myUser.removeFollow(otherUser) && otherUser.removeFollower(myUser)) {
+                            AckMessage ack = new AckMessage(followMessage.getOpCode(), otherUsername);
+                            connections.send(connId, ack);
+                        }
+                        else {
+                            ErrorMessage error = new ErrorMessage(followMessage.getOpCode());
+                            connections.send(connId, error);
+                        }
                     }
                 }
+            }
+            else {
+                ErrorMessage error = new ErrorMessage(followMessage.getOpCode());
+                connections.send(connId, error); //other user is not registered
             }
         }
     }

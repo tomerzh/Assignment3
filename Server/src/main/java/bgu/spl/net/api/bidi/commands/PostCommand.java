@@ -29,35 +29,39 @@ public class PostCommand implements Command {
         this.connections = (ConnectionsImpl) connections;
         this.usersToSend = currMessage.getUsersToSend();
         String userName = this.connections.getUsername(connId);
-        User currUser = userRegistry.getUser(userName);
 
-        if(currUser.isLoggedIn()){
+        if(userName != null){ //logged in
+            User currUser = userRegistry.getUser(userName);
             boolean err = false;
             //checks if @user is blocked user or unregistered
             for(String name : usersToSend){
-                if(currUser.isBlocked(name) || !(userRegistry.isUserRegistered(name))){
+                if(!(userRegistry.isUserRegistered(name))){
                     err = true;
                 }
             }
-
             if(!err){
                 //add to myPosts
                 currUser.newPost(currMessage.getContent());
+                //send to @users
+                for(String name : usersToSend){
+                    if(!currUser.isBlocked(name)){
+                        User receiver = userRegistry.getUser(name);
+                        byte one = 1;
+                        NotificationMessage notification = new NotificationMessage(one, userName,
+                                currMessage.getContent());
+                        sendNotification(notification, receiver);
+                    }
+                }
                 //send to followers
                 for(User follower : currUser.getFollowers()){
                     //send notification
-                    NotificationMessage notification = new NotificationMessage((byte) 1, userName,
-                            currMessage.getContent());
-                    sendNotification(notification, follower);
+                    if(!usersToSend.contains(follower.getUsername())){
+                        short one = 1;
+                        NotificationMessage notification = new NotificationMessage(one, userName,
+                                currMessage.getContent());
+                        sendNotification(notification, follower);
+                    }
                 }
-                //send to @users
-                for(String name : usersToSend){
-                    User receiver = userRegistry.getUser(name);
-                    NotificationMessage notification = new NotificationMessage((byte) 1, userName,
-                            currMessage.getContent());
-                    sendNotification(notification, receiver);
-                }
-
                 AckMessage ack = new AckMessage(currMessage.getOpCode());
                 this.connections.send(connId, ack);
             }

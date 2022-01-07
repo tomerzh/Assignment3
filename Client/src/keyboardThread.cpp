@@ -92,7 +92,7 @@ void keyboardThread::run() {
                 handler.sendBytes(currOpcode, 2);
                 handler.sendFrameAscii(words.at(1), '\0'); //userName
                 string content = "";
-                for(int i = 1; i < words.size(); i++) {
+                for(int i = 2; i < words.size(); i++) {
                     content.append(words.at(i));
                     content.append(" ");
                     //content = content + words.at(i) + " ";
@@ -109,7 +109,7 @@ void keyboardThread::run() {
                 handler.sendFrameAscii(words.at(1), '\0'); //username list
             }
             else if ((currWord == "BLOCK")){
-                shortToBytes((short) 8, currOpcode);
+                shortToBytes((short) 12, currOpcode);
                 handler.sendBytes(currOpcode, 2);
                 handler.sendFrameAscii(words.at(1), '\0'); //userName
             }

@@ -7,11 +7,11 @@ import java.nio.charset.StandardCharsets;
 
 public class NotificationMessage implements Message {
     private short opCode = 9;
-    private byte notificationType;
+    private short notificationType;
     private String postingUser;
     private String Content;
 
-    public NotificationMessage(byte notificationType, String postingUser, String content) {
+    public NotificationMessage(short notificationType, String postingUser, String content) {
         this.notificationType = notificationType;
         this.postingUser = postingUser;
         this.Content = content;
@@ -27,7 +27,10 @@ public class NotificationMessage implements Message {
         bytesArrOp[0] = (byte)((opCode >> 8) & 0xFF);
         bytesArrOp[1] = (byte)(opCode & 0xFF);
 
-        byte[] bytesArrType = new byte[notificationType];
+        byte[] bytesArrType = new byte[2];
+        bytesArrType[0] = (byte)((notificationType >> 8) & 0xFF);
+        bytesArrType[1] = (byte)(notificationType & 0xFF);
+
 
         byte[] bytesArrPostingUser = postingUser.getBytes(StandardCharsets.UTF_8);
         int postingUserArrSize = bytesArrPostingUser.length;
@@ -43,7 +46,7 @@ public class NotificationMessage implements Message {
         byte[] bytesArrEnd = ";".getBytes(StandardCharsets.UTF_8);
         int sizeEnd = bytesArrEnd.length;
 
-        ByteBuffer buffer = ByteBuffer.wrap(new byte[2+1+postingUserArrSize+
+        ByteBuffer buffer = ByteBuffer.wrap(new byte[2+2+postingUserArrSize+
                                 backSlashArrSize+contentArrSize+backSlashArrSize+sizeEnd]);
 
         buffer.put(bytesArrOp);

@@ -29,19 +29,17 @@ public class LogoutCommand implements Command {
         this.currMessage = (LogoutMessage) message;
         System.out.println("Logout connId is: " + connId);
         String userName = this.connections.getUsername(connId);
-        User currUser = userRegistry.getUser(userName);
-
         //check if connected, if true, logout user
         if(userName != null){
+            User currUser = userRegistry.getUser(userName);
             currUser.setLoggedIn(false);
+
+            AckMessage ack = new AckMessage(currMessage.getOpCode());
+            this.connections.send(connId, ack);
 
             this.connections.disconnect(connId);
             this.connections.removeUser(userName);
             this.connections.removeClient(connId);
-
-            AckMessage ack = new AckMessage(currMessage.getOpCode());
-            this.connections.send(connId, ack);
-            System.out.println("Logout ack sent!");
         }
         else{
             ErrorMessage error = new ErrorMessage(currMessage.getOpCode());

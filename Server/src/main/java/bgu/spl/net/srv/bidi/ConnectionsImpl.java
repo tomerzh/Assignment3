@@ -27,7 +27,6 @@ public class ConnectionsImpl<T> implements Connections<T> {
 
     public void removeClient(int connId){
         connIdToHandler.remove(connId);
-        System.out.println("Connections, client removed");
     }
 
     public void addNewUser(String username, int connId){
@@ -39,7 +38,6 @@ public class ConnectionsImpl<T> implements Connections<T> {
         int id = usernameToId.get(username);
         usernameToId.remove(username);
         idToUsername.remove(id);
-        System.out.println("Connections, user removed");
     }
 
     public String getUsername(int id) {

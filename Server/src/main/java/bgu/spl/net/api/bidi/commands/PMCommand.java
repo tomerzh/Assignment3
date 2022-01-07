@@ -33,7 +33,7 @@ public class PMCommand implements Command {
     @Override
     public void process(Message message, int connId, Connections connections) {
         pmMessage = (PmMessage) message;
-        ConnectionsImpl conn = (ConnectionsImpl) connections;
+        conn = (ConnectionsImpl) connections;
         myUsername = conn.getUsername(connId);
         if (myUsername == null) {
             ErrorMessage error = new ErrorMessage(pmMessage.getOpCode());
@@ -57,7 +57,8 @@ public class PMCommand implements Command {
                 else {
                     content = FilteredWords.filterWords(pmMessage.getContent());
                     myUser.addPM(pmMessage);
-                    NotificationMessage notification = new NotificationMessage((byte) 0, myUsername, content);
+                    short zero = 0;
+                    NotificationMessage notification = new NotificationMessage(zero, myUsername, content);
                     sendNotification(notification, otherUser);
 
                     AckMessage ack = new AckMessage(pmMessage.getOpCode());

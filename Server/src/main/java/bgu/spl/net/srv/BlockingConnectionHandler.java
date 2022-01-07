@@ -47,6 +47,7 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
                     protocol.process(nextMessage);
                 }
             }
+            System.out.println("While loop of connectionhandler finished!, connId: " + connectionId);
 
         } catch (IOException ex) {
             ex.printStackTrace();
