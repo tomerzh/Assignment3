@@ -9,7 +9,7 @@ using boost::asio::ip::tcp;
 
 keyboardThread::keyboardThread(ConnectionHandler &connectionHandler, std::mutex &_mutex,
                                std::condition_variable &_conn, socketThread &_socket) :
-                               handler(connectionHandler), key(_mutex), conn(_conn), socket(_socket) {shouldTerminate=false;}
+                               handler(connectionHandler), key(_mutex), conn(_conn), socket(_socket) {}
 
 using namespace std;
 
@@ -84,7 +84,6 @@ void keyboardThread::run() {
                 for(int i = 1; i < words.size(); i++) {
                     content.append(words.at(i));
                     content.append(" ");
-                    //content = content + words.at(i) + " ";
                 }
                 handler.sendFrameAscii(content, '\0'); //content
             }
@@ -96,7 +95,6 @@ void keyboardThread::run() {
                 for(int i = 2; i < words.size(); i++) {
                     content.append(words.at(i));
                     content.append(" ");
-                    //content = content + words.at(i) + " ";
                 }
                 handler.sendFrameAscii(content, '\0'); //content
             }
@@ -132,17 +130,5 @@ void keyboardThread::run() {
 
         std::unique_lock<std::mutex> lock(key);
         conn.wait(lock);
-        cout << "keyboard shouldTerminate after: " << shouldTerminate << endl;
     }
-    cout << "KeyboardThread finished while loop" << endl;
 }
-
-void keyboardThread::terminate() {
-    shouldTerminate = true;
-    cout << "TERMINATE FUNC CALLED!" << shouldTerminate << endl;
-}
-
-bool keyboardThread::isShouldTerminated() {
-    return shouldTerminate;
-}
-

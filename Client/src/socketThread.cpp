@@ -94,7 +94,6 @@ void socketThread::run() {
             else if(opMessage == 3){//ack for logout
                 cout << "ACK" << " " << std::string(std::to_string((int) opMessage))  << endl;
                 this->shouldTerminate = true;
-
                 string end;
                 handler.getFrameAscii(end, ';');
             }
@@ -124,7 +123,6 @@ void socketThread::run() {
         std::unique_lock<std::mutex> lock(key);
         conn.notify_all();
     }
-    cout << "SocketThread finished while loop" << endl;
 }
 
 bool socketThread::isShouldTerminated() {

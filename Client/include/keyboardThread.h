@@ -10,14 +10,11 @@ class keyboardThread {
         keyboardThread(ConnectionHandler &connectionHandler, std::mutex &_mutex,
                        std::condition_variable &_conn, socketThread &_socket);
         void run();
-        void terminate();
-        bool isShouldTerminated();
 
     private:
         ConnectionHandler &handler;
         std::mutex &key;
         std::condition_variable &conn;
-        bool volatile shouldTerminate; //shouldTerminate
         socketThread &socket;
 };
 
