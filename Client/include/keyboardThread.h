@@ -4,6 +4,9 @@
 
 #include "connectionHandler.h"
 #include "socketThread.h"
+#include <condition_variable>
+#include <mutex>
+
 
 class keyboardThread {
     public:

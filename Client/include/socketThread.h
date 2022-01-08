@@ -6,6 +6,9 @@
 #define CLIENT_SOCKETTHREAD_H
 
 #include "connectionHandler.h"
+#include <condition_variable>
+#include <mutex>
+
 
 class socketThread {
 private:

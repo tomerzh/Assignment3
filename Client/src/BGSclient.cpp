@@ -4,6 +4,9 @@
 #include "../include/connectionHandler.h"
 #include "../include/socketThread.h"
 #include "../include/keyboardThread.h"
+#include <condition_variable>
+#include <mutex>
+
 using boost::asio::ip::tcp;
 
 /**

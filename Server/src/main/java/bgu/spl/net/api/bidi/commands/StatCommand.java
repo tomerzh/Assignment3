@@ -19,7 +19,7 @@ public class StatCommand implements Command {
     private String myUsername;
     private User currUser;
     private LinkedList<String> listOfUsernames;
-    private boolean errorOccurred = false;
+    private boolean errorOccurred;
 
     private short age;
     private short numOfPosts;
@@ -32,6 +32,7 @@ public class StatCommand implements Command {
 
     @Override
     public void process(Message message, int connId, Connections connections) {
+        errorOccurred = false;
         statMessage = (StatMessage) message;
         ConnectionsImpl conn = (ConnectionsImpl) connections;
         myUsername = conn.getUsername(connId);

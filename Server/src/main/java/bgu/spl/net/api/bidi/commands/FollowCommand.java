@@ -39,7 +39,6 @@ public class FollowCommand implements Command {
             if (otherUser != null) {
                 if(followOrUnfollow) { //for follow
                     if (myUser.getFollowing().contains(otherUser) || myUser.isBlocked(otherUser)) {
-                        System.out.println("Error user already following or blocked");
                         ErrorMessage error = new ErrorMessage(followMessage.getOpCode());
                         connections.send(connId, error); //error already following this user or this user is blocked
                     }
