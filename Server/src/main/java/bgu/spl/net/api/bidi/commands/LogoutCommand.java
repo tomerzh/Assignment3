@@ -1,6 +1,5 @@
 package bgu.spl.net.api.bidi.commands;
 
-import bgu.spl.net.api.bidi.BGSBidiMessagingProtocol;
 import bgu.spl.net.api.bidi.Command;
 import bgu.spl.net.api.bidi.Connections;
 import bgu.spl.net.api.bidi.Message;
@@ -27,7 +26,6 @@ public class LogoutCommand implements Command {
     public void process(Message message, int connId, Connections connections)  {
         this.connections = (ConnectionsImpl) connections;
         this.currMessage = (LogoutMessage) message;
-        System.out.println("Logout connId is: " + connId);
         String userName = this.connections.getUsername(connId);
         //check if connected, if true, logout user
         if(userName != null){

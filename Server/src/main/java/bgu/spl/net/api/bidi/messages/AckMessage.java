@@ -49,7 +49,6 @@ public class AckMessage implements Message {
 
     @Override
     public byte[] encode() {
-        System.out.println("Ack Command opCode is: " + commandOpCode);
         byte[] bytesArrOp = new byte[4];
         bytesArrOp[0] = (byte)((opCode >> 8) & 0xFF);
         bytesArrOp[1] = (byte)(opCode & 0xFF);

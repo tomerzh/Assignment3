@@ -19,7 +19,6 @@ public class ErrorMessage implements Message {
 
     @Override
     public byte[] encode() {
-        System.out.println("Error Command opCode is: " + commandOpCode);
         byte[] bytesArr0 = new byte[4];
         bytesArr0[0] = (byte)((opCode >> 8) & 0xFF);
         bytesArr0[1] = (byte)(opCode & 0xFF);

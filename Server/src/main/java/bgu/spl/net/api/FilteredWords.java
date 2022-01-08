@@ -1,7 +1,6 @@
 package bgu.spl.net.api;
 
 import java.util.HashSet;
-import java.util.Set;
 
 public class FilteredWords {
     private static HashSet<String> filteredWords = new HashSet<String>(){{
@@ -9,6 +8,7 @@ public class FilteredWords {
         add("twitter");
         add("instagram");
         add("tiktok");
+        add("meta");
     }};
 
     public static String filterWords(String content) {

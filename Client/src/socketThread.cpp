@@ -23,8 +23,6 @@ void socketThread::run() {
         handler.getBytes(opBytes, 2);
         short opCode = bytesToShort(opBytes);
 
-        cout << "opCode: " << opCode << endl;
-
         if (opCode == 9) { //Notification
             char typeBytes[2];
             handler.getBytes(typeBytes, 2);
@@ -54,8 +52,6 @@ void socketThread::run() {
             char messageOp[2];
             handler.getBytes(messageOp, 2);
             short opMessage = bytesToShort(messageOp);
-
-            cout << "messageOP: " << opMessage << endl;
 
             if(opMessage == 4){//ack for follow
                 string userName;
