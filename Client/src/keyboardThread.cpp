@@ -7,8 +7,8 @@
 using boost::asio::ip::tcp;
 
 
-keyboardThread::keyboardThread(ConnectionHandler &connectionHandler, std::mutex &_mutex) : handler(
-        connectionHandler), key(_mutex) {shouldTerminate=false;}
+keyboardThread::keyboardThread(ConnectionHandler &connectionHandler, std::mutex &_mutex, std::condition_variable &_conn) : handler(
+        connectionHandler), key(_mutex), conn(_conn) {shouldTerminate=false;}
 
 using namespace std;
 
@@ -61,7 +61,7 @@ void keyboardThread::run() {
             else if ((currWord == "LOGOUT")) {
                 shortToBytes((short) 3, currOpcode);
                 handler.sendBytes(currOpcode, 2);
-                shouldTerminate = true;
+                //shouldTerminate = true;
             }
             else if ((currWord == "FOLLOW")){
                 shortToBytes((short) 4, currOpcode);
@@ -128,6 +128,20 @@ void keyboardThread::run() {
         }
         delete[] currOpcode;
         delete[] endline;
+
+        std::unique_lock<std::mutex> lock(key);
+        conn.wait(lock);
+        cout << "keyboard shouldTerminate after: " << shouldTerminate << endl;
     }
+    cout << "KeyboardThread finished while loop" << endl;
+}
+
+void keyboardThread::terminate() {
+    shouldTerminate = true;
+    cout << "TERMINATE FUNC CALLED!" << shouldTerminate << endl;
+}
+
+bool keyboardThread::isShouldTerminated() {
+    return shouldTerminate;
 }
 

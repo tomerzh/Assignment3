@@ -6,13 +6,16 @@
 
 class keyboardThread {
     public:
-        keyboardThread(ConnectionHandler &connectionHandler, std::mutex &_mutex);
+        keyboardThread(ConnectionHandler &connectionHandler, std::mutex &_mutex, std::condition_variable &_conn);
         void run();
+        void terminate();
+        bool isShouldTerminated();
 
     private:
         ConnectionHandler &handler;
         std::mutex &key;
-        bool shouldTerminate; //shouldTerminate
+        std::condition_variable &conn;
+        bool volatile shouldTerminate; //shouldTerminate
 };
 
 

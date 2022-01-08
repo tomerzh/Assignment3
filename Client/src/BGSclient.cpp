@@ -24,9 +24,11 @@ int main (int argc, char *argv[]) {
     }
 
     std::mutex key;
+    std::condition_variable conn;
 
-    socketThread sock = socketThread(connectionHandler, key);
-    keyboardThread keyboard = keyboardThread(connectionHandler, key);
+    keyboardThread keyboard = keyboardThread(connectionHandler, key, conn);
+    socketThread sock = socketThread(connectionHandler, key, conn, keyboard);
+
 
     std::thread th1(&socketThread::run, &sock);
     std::thread th2(&keyboardThread::run, &keyboard);

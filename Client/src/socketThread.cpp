@@ -6,8 +6,9 @@
 
 using namespace std;
 
-socketThread::socketThread(ConnectionHandler &connectionHandler, std::mutex &_mutex) : handler(
-        connectionHandler), key(_mutex){shouldTerminate=false;}
+socketThread::socketThread(ConnectionHandler &connectionHandler, std::mutex &_mutex,
+                           std::condition_variable &_conn, keyboardThread &_keyboard) :
+                           handler(connectionHandler), key(_mutex), conn(_conn), keyboard(_keyboard){shouldTerminate=false;}
 
 static short bytesToShort(char* bytesArr)
 {
@@ -92,7 +93,10 @@ void socketThread::run() {
 
             else if(opMessage == 3){//ack for logout
                 cout << "ACK" << " " << std::string(std::to_string((int) opMessage))  << endl;
+                cout << "shouldTerminate after: " << keyboard.isShouldTerminated() << endl;
                 this->shouldTerminate = true;
+                keyboard.terminate();
+                cout << "shouldTerminate after: " << keyboard.isShouldTerminated() << endl;
 
                 string end;
                 handler.getFrameAscii(end, ';');
@@ -120,6 +124,8 @@ void socketThread::run() {
         else{
             cout << "no such opCode" << endl;
         }
-        //todo terminate boolean here!!!!!! 
+        std::unique_lock<std::mutex> lock(key);
+        conn.notify_all();
     }
+    cout << "SocketThread finished while loop" << endl;
 };
