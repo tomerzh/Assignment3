@@ -6,7 +6,6 @@
 #define CLIENT_SOCKETTHREAD_H
 
 #include "connectionHandler.h"
-#include "keyboardThread.h"
 
 class socketThread {
 private:
@@ -14,12 +13,12 @@ private:
     std::mutex &key;
     std::condition_variable &conn;
     bool shouldTerminate;
-    keyboardThread keyboard;
 
 public:
     socketThread(ConnectionHandler &connectionHandler, std::mutex &_mutex,
-                 std::condition_variable &_conn, keyboardThread &_keyboard);
+                 std::condition_variable &_conn);
     void run();
+    bool isShouldTerminated();
 };
 
 

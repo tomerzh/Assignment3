@@ -7,8 +7,8 @@
 using namespace std;
 
 socketThread::socketThread(ConnectionHandler &connectionHandler, std::mutex &_mutex,
-                           std::condition_variable &_conn, keyboardThread &_keyboard) :
-                           handler(connectionHandler), key(_mutex), conn(_conn), keyboard(_keyboard){shouldTerminate=false;}
+                           std::condition_variable &_conn) :
+                           handler(connectionHandler), key(_mutex), conn(_conn){shouldTerminate=false;}
 
 static short bytesToShort(char* bytesArr)
 {
@@ -93,10 +93,7 @@ void socketThread::run() {
 
             else if(opMessage == 3){//ack for logout
                 cout << "ACK" << " " << std::string(std::to_string((int) opMessage))  << endl;
-                cout << "shouldTerminate after: " << keyboard.isShouldTerminated() << endl;
                 this->shouldTerminate = true;
-                keyboard.terminate();
-                cout << "shouldTerminate after: " << keyboard.isShouldTerminated() << endl;
 
                 string end;
                 handler.getFrameAscii(end, ';');
@@ -128,4 +125,8 @@ void socketThread::run() {
         conn.notify_all();
     }
     cout << "SocketThread finished while loop" << endl;
-};
+}
+
+bool socketThread::isShouldTerminated() {
+    return shouldTerminate;
+}

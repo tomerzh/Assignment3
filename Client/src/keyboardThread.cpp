@@ -7,8 +7,9 @@
 using boost::asio::ip::tcp;
 
 
-keyboardThread::keyboardThread(ConnectionHandler &connectionHandler, std::mutex &_mutex, std::condition_variable &_conn) : handler(
-        connectionHandler), key(_mutex), conn(_conn) {shouldTerminate=false;}
+keyboardThread::keyboardThread(ConnectionHandler &connectionHandler, std::mutex &_mutex,
+                               std::condition_variable &_conn, socketThread &_socket) :
+                               handler(connectionHandler), key(_mutex), conn(_conn), socket(_socket) {shouldTerminate=false;}
 
 using namespace std;
 
@@ -19,7 +20,7 @@ static void shortToBytes(short num, char* bytesArr) // from assi
 }
 
 void keyboardThread::run() {
-    while (!shouldTerminate) {
+    while (!socket.isShouldTerminated()) {
         const short bufsize = 1024;
         char buf[bufsize];
         std::cin.getline(buf, bufsize);
