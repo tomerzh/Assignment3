@@ -10,10 +10,11 @@
 class socketThread {
 private:
     ConnectionHandler &handler;
+    std::mutex &key;
     bool shouldTerminate;
 
 public:
-    socketThread(ConnectionHandler &connectionHandler);
+    socketThread(ConnectionHandler &connectionHandler, std::mutex &_mutex);
     void run();
 };
 

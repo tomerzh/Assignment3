@@ -23,8 +23,10 @@ int main (int argc, char *argv[]) {
         return 1;
     }
 
-    socketThread sock = socketThread(connectionHandler);
-    keyboardThread keyboard = keyboardThread(connectionHandler);
+    std::mutex key;
+
+    socketThread sock = socketThread(connectionHandler, key);
+    keyboardThread keyboard = keyboardThread(connectionHandler, key);
 
     std::thread th1(&socketThread::run, &sock);
     std::thread th2(&keyboardThread::run, &keyboard);

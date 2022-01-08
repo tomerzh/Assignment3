@@ -7,8 +7,8 @@
 using boost::asio::ip::tcp;
 
 
-keyboardThread::keyboardThread(ConnectionHandler &connectionHandler) : handler(
-        connectionHandler) {shouldTerminate=false;}
+keyboardThread::keyboardThread(ConnectionHandler &connectionHandler, std::mutex &_mutex) : handler(
+        connectionHandler), key(_mutex) {shouldTerminate=false;}
 
 using namespace std;
 

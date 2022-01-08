@@ -6,8 +6,8 @@
 
 using namespace std;
 
-socketThread::socketThread(ConnectionHandler &connectionHandler) : handler(
-        connectionHandler){shouldTerminate=false;}
+socketThread::socketThread(ConnectionHandler &connectionHandler, std::mutex &_mutex) : handler(
+        connectionHandler), key(_mutex){shouldTerminate=false;}
 
 static short bytesToShort(char* bytesArr)
 {
